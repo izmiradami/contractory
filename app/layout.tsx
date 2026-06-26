@@ -7,7 +7,7 @@ import '@/styles/globals.css'
 export const metadata: Metadata = {
   title: {
     default:  'Contractory',
-    template: '%s — Contractory',
+    template: '%s â€” Contractory',
   },
   description:
     'The Developer Operating System for Arc. Deploy, manage and interact with smart contracts on the Arc blockchain.',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     type:        'website',
     locale:      'en_US',
     siteName:    'Contractory',
-    title:       'Contractory — Developer OS for Arc',
+    title:       'Contractory â€” Developer OS for Arc',
     description: 'Deploy, manage and interact with smart contracts on the Arc blockchain.',
   },
   twitter: {
@@ -28,6 +28,11 @@ export const metadata: Metadata = {
   robots: {
     index:  true,
     follow: true,
+  },
+  icons: {
+    icon:     '/logo.png',
+    shortcut: '/logo.png',
+    apple:    '/logo.png',
   },
 }
 
