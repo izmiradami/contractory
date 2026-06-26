@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// ─── Nav items (plugin-driven in Phase 5, static for now) ─────
+// â”€â”€â”€ Nav items (plugin-driven in Phase 5, static for now) â”€â”€â”€â”€â”€
 
 interface NavItem {
   label:   string
@@ -52,7 +52,7 @@ const GROUP_LABELS: Record<string, string> = {
   tools:   'Developer Tools',
 }
 
-// ─── Component ────────────────────────────────────────────────
+// â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function Sidebar() {
   const pathname   = usePathname()
@@ -80,10 +80,8 @@ export function Sidebar() {
         collapsed && 'justify-center px-2'
       )}>
         <div className="flex items-center gap-2.5">
-          {/* Contractory mark — indigo square */}
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent">
-            <span className="text-xs font-bold text-white">C</span>
-          </div>
+          {/* Contractory logo */}
+          <img src="/logo.png" alt="Contractory" className="h-7 w-7 shrink-0 rounded-md object-cover" />
           {!collapsed && (
             <span className="text-sm font-semibold tracking-tight text-text-primary">
               Contractory
