@@ -271,8 +271,7 @@ function NetworkCard() {
     <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
       <div className="border-b border-border-subtle px-4 py-3.5 flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-text-primary">Arc Testnet</p>
-          <p className="text-2xs text-text-tertiary mt-0.5">Chain ID 72</p>
+          <p className="text-2xs text-text-tertiary mt-0.5">Chain ID 5042002</p>
         </div>
         <StatusDot status={networkStatus} />
       </div>
