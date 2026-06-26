@@ -41,9 +41,7 @@ export default function ConnectPage() {
 
         {/* Logo */}
         <div className="flex flex-col items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent shadow-glow-accent">
-            <span className="text-xl font-bold text-white">C</span>
-          </div>
+          <img src="/logo.png" alt="Contractory" className="h-14 w-14 rounded-2xl object-cover shadow-glow-accent" />
           <div className="text-center">
             <h1 className="text-3xl font-semibold tracking-tight text-text-primary">
               Contractory
@@ -61,12 +59,12 @@ export default function ConnectPage() {
             Connect to start deploying contracts, bridging USDC, and managing your Arc environment.
           </p>
 
-          <div className="flex justify-center">
-            <ConnectButton />
+          <div className="contractory-connect flex justify-center">
+            <ConnectButton label="Connect Wallet" />
           </div>
 
           <p className="mt-4 text-center text-xs text-text-tertiary">
-            MetaMask · Rabby · Coinbase Wallet · WalletConnect
+            MetaMask Â· Rabby Â· Coinbase Wallet Â· WalletConnect
           </p>
         </div>
 

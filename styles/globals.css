@@ -284,3 +284,7 @@
   }
   .scrollbar-hide::-webkit-scrollbar { display: none; }
 }
+
+.contractory-connect button { background: hsl(var(--accent-primary)) !important; color: #fff !important; box-shadow: none !important; border-radius: 0.625rem !important; font-weight: 600 !important; }
+.contractory-connect button:hover { background: hsl(var(--accent-hover)) !important; }
+
