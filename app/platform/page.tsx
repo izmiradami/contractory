@@ -2,18 +2,17 @@
 
 import { useAccount }        from 'wagmi'
 import { useRouter }         from 'next/navigation'
-import { useEffect }         from 'react'
+import { useEffect, useState } from 'react'
 import { useArcNetwork }     from '@/hooks/blockchain/use-arc-network'
 import { useArcBalance }     from '@/hooks/blockchain/use-arc-balance'
 import { truncateAddress }   from '@/lib/utils'
 import { cn }                from '@/lib/utils'
 import {
-  Code2, Bot, Wallet, Layers, Settings as SettingsIcon,
-  Rocket, Coins, ImageIcon, Zap, Activity,
-  Copy, ExternalLink, ChevronRight, ShieldCheck,
+  Code2, Bot, Layers, Rocket, Coins, ImageIcon, Zap, Activity,
+  Copy, ExternalLink, Sparkles, FileCode, ShieldCheck, Lightbulb,
 } from 'lucide-react'
 
-// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Helpers ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+// --- Helpers ---
 
 function StatusDot({ status }: { status: 'healthy' | 'degraded' | 'down' }) {
   return (
@@ -26,53 +25,87 @@ function StatusDot({ status }: { status: 'healthy' | 'degraded' | 'down' }) {
   )
 }
 
-// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ LEFT: Workspace Nav (only real, working pages) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+// --- Hero ---
 
-const WORKSPACE_ITEMS = [
-  { label: 'Contract Studio',  icon: Code2,        href: '/platform/studio',    desc: 'Write, compile & deploy' },
-  { label: 'My Contracts',     icon: Layers,       href: '/platform/contracts', desc: 'Manage deployments' },
-  { label: 'AI Agents',        icon: Bot,          href: '/platform/agents',    desc: 'ERC-8004 identity' },
-  { label: 'Settings',         icon: SettingsIcon, href: '/platform/settings',  desc: 'Preferences' },
-]
-
-function WorkspaceNav() {
+function Hero() {
   const router = useRouter()
   return (
-    <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
-      <div className="border-b border-border-subtle px-4 py-3">
-        <p className="text-sm font-semibold text-text-primary">Workspace</p>
-        <p className="text-2xs text-text-tertiary mt-0.5">Smart contract development for Arc</p>
-      </div>
-      <nav aria-label="Workspace navigation">
-        {WORKSPACE_ITEMS.map(({ label, icon: Icon, href, desc }) => (
+    <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-background-secondary mb-6">
+      <div className="pointer-events-none absolute -top-24 -right-16 h-72 w-72 rounded-full bg-accent/10 blur-3xl" aria-hidden="true" />
+      <div className="relative px-8 py-10">
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-accent-border bg-accent-subtle px-3 py-1 mb-4">
+          <Sparkles size={12} className="text-accent" aria-hidden="true" />
+          <span className="text-xs font-semibold text-accent">Developer OS for Arc</span>
+        </div>
+        <h1 className="text-3xl font-semibold tracking-tight text-text-primary max-w-2xl">
+          Build your next smart contract on Arc
+        </h1>
+        <p className="mt-2 text-sm text-text-secondary leading-relaxed max-w-xl">
+          Write, compile, analyze and deploy Arc-compatible contracts with USDC-native gas
+          and sub-second finality — all from one workspace.
+        </p>
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <button
-            key={href}
-            onClick={() => router.push(href)}
-            className="group flex w-full items-center gap-3 px-4 py-3 text-left border-b border-border-subtle last:border-0 hover:bg-background-tertiary transition-colors"
+            onClick={() => router.push('/platform/studio')}
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
           >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-background-elevated border border-border-subtle group-hover:border-accent-border group-hover:bg-accent-subtle transition-colors">
-              <Icon size={15} className="text-text-tertiary group-hover:text-accent transition-colors" aria-hidden="true" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-text-primary">{label}</p>
-              <p className="text-xs text-text-tertiary">{desc}</p>
-            </div>
-            <ChevronRight size={14} className="text-text-disabled group-hover:text-text-tertiary transition-colors" aria-hidden="true" />
+            <Rocket size={15} aria-hidden="true" />
+            New Contract
           </button>
-        ))}
-      </nav>
+          <button
+            onClick={() => router.push('/platform/studio')}
+            className="inline-flex items-center gap-2 rounded-lg border border-border-default bg-background-tertiary px-5 py-2.5 text-sm font-medium text-text-secondary hover:text-text-primary hover:border-border-strong transition-colors"
+          >
+            <Code2 size={15} aria-hidden="true" />
+            Open Contract Studio
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
 
-// CENTER: Wallet Card
+// --- Premium Quick Actions ---
+
+const QUICK_ACTIONS = [
+  { icon: Rocket,    title: 'New Contract',        desc: 'Start from an Arc-ready template',      href: '/platform/studio',    color: 'text-accent' },
+  { icon: Code2,     title: 'Open Contract Studio', desc: 'Write, compile and deploy',            href: '/platform/studio',    color: 'text-interactive' },
+  { icon: Layers,    title: 'My Contracts',        desc: 'Manage your deployments',               href: '/platform/contracts', color: 'text-usdc' },
+  { icon: ShieldCheck, title: 'AI Review',         desc: 'Check compatibility and security',      href: '/platform/studio',    color: 'text-status-warning' },
+]
+
+function QuickActions() {
+  const router = useRouter()
+  return (
+    <div>
+      <p className="text-sm font-semibold text-text-primary mb-3">Quick Actions</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {QUICK_ACTIONS.map(({ icon: Icon, title, desc, href, color }) => (
+          <button
+            key={title}
+            onClick={() => router.push(href)}
+            className="group flex items-start gap-3 rounded-xl border border-border-subtle bg-background-secondary p-4 text-left transition-all hover:border-border-default hover:bg-background-tertiary active:scale-[0.98]"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-background-tertiary transition-transform group-hover:scale-110">
+              <Icon size={18} className={color} aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-text-primary">{title}</p>
+              <p className="mt-0.5 text-xs text-text-tertiary leading-relaxed">{desc}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// --- Wallet Card ---
 
 function WalletCard() {
   const { address, isConnected, chain } = useAccount()
   const { formatted, isLoading }        = useArcBalance()
-
   if (!isConnected) return null
-
   return (
     <div className="rounded-xl border border-border-subtle bg-background-secondary p-5">
       <div className="flex items-start justify-between mb-4">
@@ -84,18 +117,14 @@ function WalletCard() {
             </div>
             <div>
               <p className="text-sm font-medium text-text-primary font-mono">
-                {address ? truncateAddress(address, 5) : 'ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â'}
+                {address ? truncateAddress(address, 5) : '-'}
               </p>
               <p className="text-xs text-text-tertiary">{chain?.name ?? 'Arc Testnet'}</p>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-1">
-          <button
-            aria-label="Copy address"
-            onClick={() => address && navigator.clipboard.writeText(address)}
-            className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:bg-background-tertiary hover:text-text-secondary transition-colors"
-          >
+          <button aria-label="Copy address" onClick={() => address && navigator.clipboard.writeText(address)} className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:bg-background-tertiary hover:text-text-secondary transition-colors">
             <Copy size={13} aria-hidden="true" />
           </button>
           <a href={address ? `https://testnet.arcscan.app/address/${address}` : 'https://testnet.arcscan.app'} target="_blank" rel="noopener noreferrer" aria-label="View on explorer" className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:bg-background-tertiary hover:text-text-secondary transition-colors">
@@ -114,63 +143,39 @@ function WalletCard() {
   )
 }
 
-// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Quick Actions (only real, working destinations) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+// --- Recent Contracts (honest empty state) ---
 
-const QUICK_ACTIONS = [
-  { label: 'Deploy Contract', icon: Rocket,    href: '/platform/studio',          color: 'text-accent'         },
-  { label: 'Create ERC20',    icon: Coins,     href: '/platform/studio?t=erc20',  color: 'text-interactive'    },
-  { label: 'Create NFT',      icon: ImageIcon, href: '/platform/studio?t=erc721', color: 'text-status-warning' },
-  { label: 'My Contracts',    icon: Layers,    href: '/platform/contracts',       color: 'text-usdc'           },
-  { label: 'AI Agents',       icon: Bot,       href: '/platform/agents',          color: 'text-accent'         },
-  { label: 'Settings',        icon: SettingsIcon, href: '/platform/settings',     color: 'text-text-tertiary'  },
-]
-
-function QuickActions() {
-  const router = useRouter()
-  return (
-    <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
-      <div className="border-b border-border-subtle px-5 py-3.5">
-        <p className="text-sm font-medium text-text-primary">Quick Actions</p>
-      </div>
-      <div className="grid grid-cols-3 gap-px bg-border-subtle" role="list">
-        {QUICK_ACTIONS.map(({ label, icon: Icon, href, color }) => (
-          <button
-            key={href}
-            role="listitem"
-            onClick={() => router.push(href)}
-            className="flex flex-col items-center gap-2 bg-background-secondary px-3 py-4 text-center hover:bg-background-tertiary transition-colors group"
-          >
-            <Icon size={20} className={cn(color, 'transition-transform group-hover:scale-110')} aria-hidden="true" />
-            <span className="text-xs font-medium text-text-secondary leading-tight">{label}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function RecentSection({ title, link, linkLabel }: {
-  title: string; link: string; linkLabel: string
-}) {
+function RecentContracts() {
   const router = useRouter()
   return (
     <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
       <div className="flex items-center justify-between border-b border-border-subtle px-5 py-3.5">
-        <p className="text-sm font-medium text-text-primary">{title}</p>
-        <button onClick={() => router.push(link)} className="text-xs text-interactive hover:text-interactive-hover transition-colors">
-          {linkLabel} ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
+        <p className="text-sm font-medium text-text-primary">Recent Contracts</p>
+        <button onClick={() => router.push('/platform/contracts')} className="text-xs text-interactive hover:text-interactive-hover transition-colors">
+          View all
         </button>
       </div>
-      <div className="px-5 py-5 flex items-center justify-between">
-        <p className="text-sm text-text-tertiary">Nothing here yet</p>
-        <button onClick={() => router.push(link)} className="text-xs text-interactive hover:text-interactive-hover transition-colors">
-          Get started</button>
+      <div className="flex flex-col items-center justify-center gap-3 px-5 py-12 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-border-subtle bg-background-tertiary">
+          <FileCode size={22} className="text-text-disabled" aria-hidden="true" />
+        </div>
+        <div>
+          <p className="text-sm font-medium text-text-primary">No contracts deployed yet</p>
+          <p className="mt-1 text-xs text-text-tertiary">Deploy your first smart contract on Arc.</p>
+        </div>
+        <button
+          onClick={() => router.push('/platform/studio')}
+          className="mt-1 inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
+        >
+          <Rocket size={14} aria-hidden="true" />
+          Create Contract
+        </button>
       </div>
     </div>
   )
 }
 
-// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ RIGHT: Network ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+// --- Network Card ---
 
 function NetworkCard() {
   const { latestBlock, gasPrice, finality, rpcStatus, networkStatus, isLoading } = useArcNetwork()
@@ -191,23 +196,61 @@ function NetworkCard() {
         <StatusDot status={networkStatus} />
       </div>
       <div className="divide-y divide-border-subtle">
-        {rows.map(({ label, value, status, usdc }) => (
+        {rows.map(({ label, value, usdc, status }) => (
           <div key={label} className="flex items-center justify-between px-4 py-2.5">
             <p className="text-xs text-text-tertiary">{label}</p>
             <div className="flex items-center gap-1.5">
-              {status && <StatusDot status={status as 'healthy' | 'degraded' | 'down'} />}
-              <p className={cn('text-xs font-medium tabular', usdc ? 'text-usdc' : 'text-text-primary')}>{value}</p>
+              {status && <StatusDot status={status} />}
+              <p className={cn('text-xs font-medium', usdc ? 'text-usdc' : 'text-text-primary')}>{value}</p>
             </div>
           </div>
         ))}
       </div>
       <div className="border-t border-border-subtle px-4 py-3">
         <a href="https://testnet.arcscan.app" target="_blank" rel="noopener noreferrer" className="text-xs text-interactive hover:text-interactive-hover transition-colors">
-          Open ArcScan</a>
+          Open ArcScan
+        </a>
       </div>
     </div>
   )
 }
+
+// --- Developer Tips (auto-rotating, static) ---
+
+const DEV_TIPS = [
+  { title: 'Use the ERC20 template', desc: 'Start from an audited, Arc-ready ERC20 in Contract Studio.' },
+  { title: 'Verify every deployment', desc: 'Verified contracts build trust and unlock ArcScan source view.' },
+  { title: 'Review compatibility first', desc: 'Aim for 100/100 on the Arc Analyzer before you deploy.' },
+  { title: 'Gas is paid in USDC', desc: 'No volatile gas token — costs stay predictable at ~$0.01 / tx.' },
+]
+
+function DeveloperTips() {
+  const [idx, setIdx] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % DEV_TIPS.length), 5000)
+    return () => clearInterval(t)
+  }, [])
+  const tip = DEV_TIPS[idx]
+  return (
+    <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
+      <div className="border-b border-border-subtle px-4 py-3 flex items-center gap-2">
+        <Lightbulb size={14} className="text-accent" aria-hidden="true" />
+        <p className="text-sm font-medium text-text-primary">Developer Tips</p>
+      </div>
+      <div className="px-4 py-4 min-h-[84px]">
+        <p className="text-sm font-medium text-text-primary">{tip.title}</p>
+        <p className="mt-1 text-xs text-text-tertiary leading-relaxed">{tip.desc}</p>
+      </div>
+      <div className="flex items-center gap-1.5 px-4 pb-3">
+        {DEV_TIPS.map((_, i) => (
+          <span key={i} className={cn('h-1 rounded-full transition-all', i === idx ? 'w-5 bg-accent' : 'w-1.5 bg-border-default')} aria-hidden="true" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// --- Arc Platform features ---
 
 function ArcFeaturesCard() {
   const features = [
@@ -236,10 +279,10 @@ function ArcFeaturesCard() {
   )
 }
 
-// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PAGE ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+// --- PAGE ---
 
 export default function WorkspacePage() {
-  const { isConnected, address } = useAccount()
+  const { isConnected } = useAccount()
   const router = useRouter()
 
   useEffect(() => {
@@ -248,44 +291,24 @@ export default function WorkspacePage() {
 
   if (!isConnected) return null
 
-  const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening'
-
   return (
     <div className="animate-fade-in-up">
-      {/* Header */}
-      <div className="mb-7 flex items-end justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
-            {greeting}{address ? `, ${truncateAddress(address, 4)}` : ''}
-          </h1>
-          <p className="mt-1 text-sm text-text-secondary">Developer Workspace Ãƒâ€šÂ· Arc Testnet</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-usdc" aria-label="Connected" />
-          <span className="text-xs text-text-tertiary">Arc Testnet Ãƒâ€šÂ· Connected</span>
-        </div>
-      </div>
+      <Hero />
 
-      {/* 3-column layout */}
-      <div className="grid grid-cols-[220px_1fr_240px] gap-5 items-start">
-
-        {/* LEFT */}
-        <WorkspaceNav />
-
-        {/* CENTER */}
-        <div className="space-y-4 min-w-0">
-          <WalletCard />
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5 items-start">
+        {/* MAIN */}
+        <div className="space-y-5 min-w-0">
           <QuickActions />
-          <RecentSection title="Recent Contracts" link="/platform/contracts" linkLabel="View all" />
+          <RecentContracts />
         </div>
 
         {/* RIGHT */}
         <div className="space-y-4">
+          <WalletCard />
           <NetworkCard />
+          <DeveloperTips />
           <ArcFeaturesCard />
         </div>
-
       </div>
     </div>
   )
