@@ -199,7 +199,7 @@ function AgentDetail({ agent, onClose }: { agent: StoredAgent; onClose: () => vo
                 {[
                   ['Owner',      truncateAddress(agent.owner, 6)],
                   ['Registered', formatTimeAgo(agent.registeredAt)],
-                  ['Chain',      'Arc Testnet (72)'],
+                  ['Chain',      'Arc Testnet (5042002)'],
                   ['Visibility', agent.visibility],
                 ].map(([label, value]) => (
                   <div key={String(label)} className="flex items-center justify-between py-2 border-b border-border-subtle last:border-0">

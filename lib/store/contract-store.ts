@@ -58,7 +58,7 @@ export const contractStore = {
       .from('contracts')
       .select('*')
       .eq('owner_address', ownerAddress.toLowerCase())
-      .eq('chain_id', 72)
+      .eq('chain_id', 5042002)
       .order('deployed_at', { ascending: false })
 
     if (error || !data) return []

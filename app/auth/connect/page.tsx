@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect }       from 'react'
-import { useRouter }       from 'next/navigation'
-import { useAccount }      from 'wagmi'
-import { ConnectButton }   from '@rainbow-me/rainbowkit'
-import { ArcGrid }         from '@/components/layout/background/arc-grid'
-import { Zap, Shield, Bot, ArrowRight } from 'lucide-react'
+import { useEffect }     from 'react'
+import { useRouter }     from 'next/navigation'
+import { useAccount }    from 'wagmi'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { ArcGrid }       from '@/components/layout/background/arc-grid'
+import { Zap, Shield, Bot } from 'lucide-react'
 
 const FEATURES = [
   {
@@ -61,18 +61,9 @@ export default function ConnectPage() {
             Connect to start deploying contracts, bridging USDC, and managing your Arc environment.
           </p>
 
-          <ConnectButton.Custom>
-            {({ openConnectModal, mounted }) => (
-              <button
-                onClick={openConnectModal}
-                disabled={!mounted}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background-secondary disabled:opacity-50"
-              >
-                Connect wallet
-                <ArrowRight size={16} aria-hidden="true" />
-              </button>
-            )}
-          </ConnectButton.Custom>
+          <div className="flex justify-center">
+            <ConnectButton />
+          </div>
 
           <p className="mt-4 text-center text-xs text-text-tertiary">
             MetaMask · Rabby · Coinbase Wallet · WalletConnect

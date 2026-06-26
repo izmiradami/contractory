@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
 
   // Security headers
   async headers() {
+    if (process.env.NODE_ENV === 'development') {
+      return []
+    }
     return [
       {
         source: '/(.*)',
@@ -31,7 +34,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://rpc.testnet.arc.network https://*.walletconnect.com wss://*.walletconnect.com https://api.coingecko.com",
+              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://rpc.testnet.arc.network https://*.arc.network https://*.walletconnect.com wss://*.walletconnect.com https://*.walletconnect.org wss://*.walletconnect.org https://*.reown.com wss://*.reown.com https://explorer-api.walletconnect.com https://api.coingecko.com https://*.merkle.io",
               "frame-src 'none'",
               "object-src 'none'",
             ].join('; '),

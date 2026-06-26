@@ -11,7 +11,7 @@ import type {
 
 // ─── Arc Constants ────────────────────────────────────────────────────────
 
-export const ARC_CHAIN_ID = 72  // Arc Testnet chain ID
+export const ARC_CHAIN_ID = 5042002  // Arc Testnet chain ID
 
 export const ARC_CONTRACTS = {
   // Native USDC — ERC-20 interface for the native gas token

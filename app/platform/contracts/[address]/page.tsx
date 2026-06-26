@@ -217,7 +217,7 @@ export default function ContractDetailPage({
                     <p className="text-2xs font-semibold uppercase tracking-wider text-text-disabled mb-3">Contract Info</p>
                     {[
                       ['Address',  <code key="a" className="text-xs font-mono text-text-secondary">{truncateAddress(contract.address, 6)}</code>],
-                      ['Network',  <span key="n" className="text-xs text-text-primary">Arc Testnet (72)</span>],
+                      ['Network',  <span key="n" className="text-xs text-text-primary">Arc Testnet (5042002)</span>],
                       ['Status',   <span key="s" className={cn('text-xs capitalize', contract.status === 'active' ? 'text-usdc' : 'text-text-tertiary')}>{contract.status}</span>],
                       ['Deployed', <span key="d" className="text-xs text-text-primary">{formatTimeAgo(contract.deployedAt)}</span>],
                       ['Deployer', <code key="dep" className="text-xs font-mono text-text-secondary">{truncateAddress(contract.deployer, 4)}</code>],
