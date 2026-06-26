@@ -102,12 +102,20 @@ export function analyzeArcCompatibility(source: string): CompatibilityIssue[] {
   const issues: CompatibilityIssue[] = []
   const lines = source.split('\n')
 
+  const stripComments = (line: string): string => {
+    let s = line.replace(/\/\/.*$/, '')
+    s = s.replace(/\/\*.*?\*\//g, '')
+    if (s.trim().startsWith('*')) return ''
+    return s
+  }
+
   const check = (
     pattern: RegExp,
     issue: Omit<CompatibilityIssue, 'line'>
   ) => {
     lines.forEach((line, i) => {
-      if (pattern.test(line)) {
+      const code = stripComments(line)
+      if (code && pattern.test(code)) {
         issues.push({ ...issue, line: i + 1 })
       }
     })
