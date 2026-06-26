@@ -35,7 +35,7 @@ function EditorSkeleton() {
   )
 }
 
-// ─── Types ────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type RightTab  = 'compatibility' | 'gas' | 'security' | 'ai'
 type BottomTab = 'problems' | 'deploy' | 'abi' | 'output'
@@ -44,7 +44,7 @@ type BottomTab = 'problems' | 'deploy' | 'abi' | 'output'
 
 
 
-// ─── Deploy Wizard (real) ─────────────────────────────────────
+// â”€â”€â”€ Deploy Wizard (real) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function DeployWizard({ source, contractName, score }: { source: string; contractName: string; score: number }) {
   const { phase, result, error, gasEst, warnings, deploy, reset } = useDeploy()
@@ -70,11 +70,11 @@ function DeployWizard({ source, contractName, score }: { source: string; contrac
         <div className="rounded-lg border border-border-subtle bg-background-secondary p-3 space-y-1.5 font-mono text-xs">
           <p><span className="text-text-tertiary">Address: </span><span className="text-interactive">{result.address}</span></p>
           <p><span className="text-text-tertiary">Gas: </span><span className="text-usdc">{result.gasUsed}</span></p>
-          <p><span className="text-text-tertiary">Verified: </span><span className={result.verified ? 'text-usdc' : 'text-text-tertiary'}>{result.verified ? '✓ Yes' : 'Pending'}</span></p>
+          <p><span className="text-text-tertiary">Verified: </span><span className={result.verified ? 'text-usdc' : 'text-text-tertiary'}>{result.verified ? 'âœ“ Yes' : 'Pending'}</span></p>
         </div>
         <div className="flex gap-2">
           <a href={`https://testnet.arcscan.app/address/${result.address}`} target="_blank" rel="noopener noreferrer" className="text-xs text-interactive hover:text-interactive-hover transition-colors">
-            View on ArcScan →
+            View on ArcScan â†’
           </a>
           <button onClick={reset} className="ml-auto text-xs text-text-tertiary hover:text-text-secondary transition-colors">Deploy another</button>
         </div>
@@ -115,7 +115,7 @@ function DeployWizard({ source, contractName, score }: { source: string; contrac
           <div className="rounded-lg border border-status-error/20 bg-status-error/8 px-3 py-2">
             <p className="text-xs text-status-error font-medium">{error.message}</p>
             {error.detail && <p className="text-2xs text-status-error/80 mt-1">{error.detail}</p>}
-            <button onClick={reset} className="text-2xs text-interactive mt-2 hover:text-interactive-hover transition-colors">Try again →</button>
+            <button onClick={reset} className="text-2xs text-interactive mt-2 hover:text-interactive-hover transition-colors">Try again â†’</button>
           </div>
         )}
         {phase === 'idle' && (
@@ -140,7 +140,7 @@ function DeployWizard({ source, contractName, score }: { source: string; contrac
   )
 }
 
-// ─── Main Page ────────────────────────────────────────────────
+// â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function ContractStudioPage() {
   const [source,      setSource]      = useState(DEFAULT_SOURCE)
@@ -173,7 +173,7 @@ export default function ContractStudioPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-56px)] -mx-6 -my-8 overflow-hidden">
 
-      {/* ── Toolbar ─────────────────────────────────────── */}
+      {/* â”€â”€ Toolbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="flex items-center gap-3 border-b border-border-subtle bg-background-secondary px-4 py-2.5 shrink-0">
         {/* Title */}
         <div className="flex items-center gap-2">
@@ -237,16 +237,16 @@ export default function ContractStudioPage() {
         </button>
 
         {/* Deploy button */}
-        <button className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-white hover:bg-accent-hover transition-colors">
+        <button onClick={() => setBottomTab('deploy')} className="flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-white hover:bg-accent-hover transition-colors">
           <Rocket size={13} aria-hidden="true" />
           Deploy
         </button>
       </div>
 
-      {/* ── Main 3-panel area ───────────────────────────── */}
+      {/* â”€â”€ Main 3-panel area â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="flex flex-1 overflow-hidden">
 
-        {/* ── LEFT: File explorer ── */}
+        {/* â”€â”€ LEFT: File explorer â”€â”€ */}
         <div className="w-44 shrink-0 border-r border-border-subtle bg-background-secondary flex flex-col">
           <div className="px-3 py-2 border-b border-border-subtle">
             <p className="text-2xs font-semibold uppercase tracking-wider text-text-disabled">Explorer</p>
@@ -265,7 +265,7 @@ export default function ContractStudioPage() {
           </div>
         </div>
 
-        {/* ── CENTER: Monaco Editor ── */}
+        {/* â”€â”€ CENTER: Monaco Editor â”€â”€ */}
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-hidden">
             <MonacoEditor
@@ -360,7 +360,7 @@ export default function ContractStudioPage() {
             />
           </div>
 
-          {/* ── Bottom Tabs ── */}
+          {/* â”€â”€ Bottom Tabs â”€â”€ */}
           <div className="border-t border-border-subtle shrink-0">
             {/* Tab bar */}
             <div className="flex items-center border-b border-border-subtle bg-background-secondary">
@@ -422,7 +422,7 @@ export default function ContractStudioPage() {
           </div>
         </div>
 
-        {/* ── RIGHT: Intelligence Panel ── */}
+        {/* â”€â”€ RIGHT: Intelligence Panel â”€â”€ */}
         <div className="w-72 shrink-0 border-l border-border-subtle bg-background-secondary flex flex-col">
           {/* Tab bar */}
           <div className="flex border-b border-border-subtle">
@@ -494,7 +494,7 @@ export default function ContractStudioPage() {
                   href="/platform/assistant"
                   className="block text-center text-xs text-interactive hover:text-interactive-hover transition-colors pt-1"
                 >
-                  Open full AI assistant →
+                  Open full AI assistant â†’
                 </a>
               </div>
             )}
