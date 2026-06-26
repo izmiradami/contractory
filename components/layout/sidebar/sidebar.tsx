@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// â”€â”€â”€ Nav items (plugin-driven in Phase 5, static for now) â”€â”€â”€â”€â”€
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Nav items (plugin-driven in Phase 5, static for now) Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 interface NavItem {
   label:   string
@@ -23,26 +23,15 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   // Core
-  { label: 'Dashboard',      path: '/platform',          icon: LayoutDashboard,    group: 'core' },
-  { label: 'Contract Studio', path: '/platform/studio',  icon: Code2,              group: 'core' },
-  { label: 'Contracts',      path: '/platform/contracts', icon: FileCode,           group: 'core' },
+  { label: 'Dashboard',       path: '/platform',           icon: LayoutDashboard, group: 'core' },
+  { label: 'Contract Studio', path: '/platform/studio',    icon: Code2,           group: 'core' },
+  { label: 'Contracts',       path: '/platform/contracts', icon: FileCode,        group: 'core' },
 
   // Finance
-  { label: 'Payments',       path: '/platform/money',    icon: CircleDollarSign,   group: 'finance' },
-  { label: 'Unified Balance', path: '/platform/balance', icon: Wallet,             group: 'finance' },
-  { label: 'Bridge',         path: '/platform/bridge',   icon: ArrowLeftRight,     group: 'finance' },
-  { label: 'Swap',           path: '/platform/swap',     icon: Repeat2,            group: 'finance' },
+  { label: 'Payments',        path: '/platform/money',     icon: CircleDollarSign, group: 'finance' },
 
   // Agentic
-  { label: 'AI Agents',      path: '/platform/agents',   icon: Bot,                group: 'agentic' },
-  { label: 'Job Center',     path: '/platform/jobs',     icon: Briefcase,          group: 'agentic' },
-
-  // Tools
-  { label: 'Events',         path: '/platform/events',   icon: Activity,           group: 'tools' },
-  { label: 'Explorer',       path: '/platform/explorer', icon: Search,             group: 'tools' },
-  { label: 'Batch',          path: '/platform/batch',    icon: Layers,             group: 'tools' },
-  { label: 'Dev Toolkit',    path: '/platform/tools',    icon: Wrench,             group: 'tools' },
-  { label: 'AI Assistant',   path: '/platform/assistant', icon: Sparkles,          group: 'tools' },
+  { label: 'AI Agents',       path: '/platform/agents',    icon: Bot,             group: 'agentic' },
 ]
 
 const GROUP_LABELS: Record<string, string> = {
@@ -52,7 +41,7 @@ const GROUP_LABELS: Record<string, string> = {
   tools:   'Developer Tools',
 }
 
-// â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Component Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 export function Sidebar() {
   const pathname   = usePathname()
