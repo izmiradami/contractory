@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   CONTRACTORY DESIGN SYSTEM — CSS CUSTOM PROPERTIES
+   
+   Color Strategy:
+   - Indigo  → Brand / primary actions / identity
+   - Blue    → Interactive elements / links / focus
+   - Green   → USDC only: money, payments, success tx, balances
+   - Gray    → Neutral UI (Linear/Vercel style)
+   ============================================================ */
+
+@layer base {
+  /* ── DARK THEME (default) ─────────────────────────────────── */
+  :root,
+  [data-theme='dark'] {
+
+    /* Backgrounds */
+    --bg-primary:    224 16% 5%;
+    --bg-secondary:  224 14% 8%;
+    --bg-tertiary:   224 12% 11%;
+    --bg-elevated:   224 12% 14%;
+
+    /* Borders */
+    --border-subtle:  224 10% 16%;
+    --border-default: 224 10% 20%;
+    --border-strong:  224 10% 28%;
+
+    /* Text */
+    --text-primary:   220 18% 95%;
+    --text-secondary: 220 10% 62%;
+    --text-tertiary:  220 8%  42%;
+    --text-disabled:  220 8%  28%;
+
+    /* ── INDIGO — Brand / primary actions ── */
+    --accent-primary:   243 75% 65%;
+    --accent-hover:     243 75% 58%;
+    --accent-subtle:    243 50% 14%;
+    --accent-border:    243 60% 30%;
+
+    /* ── BLUE — Interactive / links / focus ── */
+    --interactive:        211 90% 62%;
+    --interactive-hover:  211 90% 55%;
+    --interactive-subtle: 211 70% 13%;
+
+    /* ── GREEN — USDC / money / payments / success only ── */
+    --usdc:          152 68% 48%;
+    --usdc-hover:    152 68% 40%;
+    --usdc-subtle:   152 45% 10%;
+    --usdc-border:   152 50% 22%;
+
+    /* ── GRAY — Neutral UI chrome ── */
+    --neutral-1:  224 10% 22%;
+    --neutral-2:  224 8%  35%;
+    --neutral-3:  224 6%  55%;
+
+    /* Semantic status */
+    --status-success: 152 68% 48%;   /* = usdc (green) */
+    --status-warning: 38  90% 56%;
+    --status-error:   0   80% 58%;
+    --status-info:    211 90% 62%;   /* = interactive (blue) */
+
+    /* Layout */
+    --sidebar-width:           240px;
+    --sidebar-width-collapsed: 64px;
+    --header-height:           56px;
+
+    /* Grid background */
+    --grid-opacity: 0.035;
+    --grid-color:   243 75% 65%;    /* Indigo grid */
+  }
+
+  /* ── LIGHT THEME ──────────────────────────────────────────── */
+  [data-theme='light'] {
+    --bg-primary:    0   0%  100%;
+    --bg-secondary:  220 20% 98%;
+    --bg-tertiary:   220 16% 96%;
+    --bg-elevated:   220 16% 94%;
+
+    --border-subtle:  220 12% 88%;
+    --border-default: 220 12% 80%;
+    --border-strong:  220 12% 68%;
+
+    --text-primary:   224 24% 10%;
+    --text-secondary: 224 12% 32%;
+    --text-tertiary:  224 8%  52%;
+    --text-disabled:  224 6%  68%;
+
+    /* Indigo — lighter mode */
+    --accent-primary:   243 65% 58%;
+    --accent-hover:     243 65% 50%;
+    --accent-subtle:    243 80% 96%;
+    --accent-border:    243 60% 80%;
+
+    /* Blue */
+    --interactive:        211 80% 52%;
+    --interactive-hover:  211 80% 44%;
+    --interactive-subtle: 211 80% 94%;
+
+    /* Green — USDC only */
+    --usdc:          152 55% 38%;
+    --usdc-hover:    152 55% 30%;
+    --usdc-subtle:   152 60% 94%;
+    --usdc-border:   152 50% 72%;
+
+    --neutral-1:  220 10% 78%;
+    --neutral-2:  220 8%  60%;
+    --neutral-3:  220 6%  42%;
+
+    --status-success: 152 55% 38%;
+    --status-warning: 38  80% 44%;
+    --status-error:   0   70% 48%;
+    --status-info:    211 80% 52%;
+
+    --grid-opacity: 0.05;
+    --grid-color:   243 65% 58%;
+  }
+
+  /* ── ACCENT OVERRIDES (user preference) ──────────────────── */
+  /* Note: these only affect the UI chrome accent, NOT USDC green */
+  [data-accent='violet'] {
+    --accent-primary:   262 80% 68%;
+    --accent-hover:     262 80% 60%;
+    --accent-subtle:    262 55% 14%;
+    --accent-border:    262 65% 32%;
+  }
+
+  [data-accent='blue'] {
+    --accent-primary:   211 90% 62%;
+    --accent-hover:     211 90% 55%;
+    --accent-subtle:    211 70% 13%;
+    --accent-border:    211 75% 28%;
+  }
+
+  [data-accent='slate'] {
+    --accent-primary:   220 14% 60%;
+    --accent-hover:     220 14% 50%;
+    --accent-subtle:    220 10% 15%;
+    --accent-border:    220 12% 30%;
+  }
+
+  /* ── BASE RESETS ──────────────────────────────────────────── */
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: hsl(var(--bg-primary));
+    color: hsl(var(--text-primary));
+    font-family: var(--font-geist-sans, 'Inter', sans-serif);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  code, kbd, samp, pre, .font-mono {
+    font-family: var(--font-geist-mono, 'JetBrains Mono', monospace);
+    font-feature-settings: 'liga' 0;
+  }
+
+  ::selection {
+    background-color: hsl(var(--accent-primary) / 0.22);
+    color: hsl(var(--text-primary));
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border-default));
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--border-strong));
+  }
+
+  /* Focus ring — indigo */
+  :focus-visible {
+    outline: 2px solid hsl(var(--accent-primary));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ── UTILITY CLASSES ────────────────────────────────────────── */
+@layer utilities {
+
+  /* USDC amount — always monospace, always green, always money */
+  .usdc-amount {
+    font-family: var(--font-geist-mono, 'JetBrains Mono', monospace);
+    font-variant-numeric: tabular-nums;
+    color: hsl(var(--usdc));
+  }
+
+  /* Address / tx hash display */
+  .address {
+    font-family: var(--font-geist-mono, 'JetBrains Mono', monospace);
+    font-size: 0.8125rem;
+    color: hsl(var(--text-secondary));
+  }
+
+  .tx-hash {
+    font-family: var(--font-geist-mono, 'JetBrains Mono', monospace);
+    font-size: 0.75rem;
+    color: hsl(var(--text-tertiary));
+  }
+
+  /* Interactive link style */
+  .link {
+    color: hsl(var(--interactive));
+    text-decoration: none;
+    transition: color 150ms;
+  }
+  .link:hover {
+    color: hsl(var(--interactive-hover));
+  }
+
+  /* Subtle glass panel */
+  .glass {
+    background: hsl(var(--bg-elevated) / 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Indigo gradient border (for key cards) */
+  .border-gradient {
+    position: relative;
+  }
+  .border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--accent-primary) / 0.5),
+      hsl(var(--border-subtle) / 0.3)
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                  linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Skeleton shimmer */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--bg-tertiary)) 0%,
+      hsl(var(--bg-elevated)) 50%,
+      hsl(var(--bg-tertiary)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* Tabular numbers */
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* Scrollbar hidden */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+}
