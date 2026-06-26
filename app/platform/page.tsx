@@ -10,10 +10,10 @@ import { cn }                from '@/lib/utils'
 import {
   Code2, Bot, Wallet, Layers, Settings as SettingsIcon,
   Rocket, Coins, ImageIcon, Zap, Activity,
-  Copy, ExternalLink, ChevronRight,
+  Copy, ExternalLink, ChevronRight, ShieldCheck,
 } from 'lucide-react'
 
-// ─── Helpers ──────────────────────────────────────────────────
+// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function StatusDot({ status }: { status: 'healthy' | 'degraded' | 'down' }) {
   return (
@@ -26,7 +26,7 @@ function StatusDot({ status }: { status: 'healthy' | 'degraded' | 'down' }) {
   )
 }
 
-// ─── LEFT: Workspace Nav (only real, working pages) ───────────
+// â”€â”€â”€ LEFT: Workspace Nav (only real, working pages) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const WORKSPACE_ITEMS = [
   { label: 'Contract Studio',  icon: Code2,        href: '/platform/studio',    desc: 'Write, compile & deploy' },
@@ -65,7 +65,7 @@ function WorkspaceNav() {
   )
 }
 
-// ─── CENTER: Wallet Card ──────────────────────────────────────
+// â”€â”€â”€ CENTER: Wallet Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function WalletCard() {
   const { address, isConnected, chain } = useAccount()
@@ -84,7 +84,7 @@ function WalletCard() {
             </div>
             <div>
               <p className="text-sm font-medium text-text-primary font-mono">
-                {address ? truncateAddress(address, 5) : '—'}
+                {address ? truncateAddress(address, 5) : 'â€”'}
               </p>
               <p className="text-xs text-text-tertiary">{chain?.name ?? 'Arc Testnet'}</p>
             </div>
@@ -108,13 +108,13 @@ function WalletCard() {
         <p className={cn('text-2xl font-semibold tabular text-usdc', isLoading && 'opacity-50')}>
           {isLoading ? '...' : formatted}
         </p>
-        <p className="text-xs text-text-tertiary mt-1">Arc Testnet · ERC-20</p>
+        <p className="text-xs text-text-tertiary mt-1">Arc Testnet Â· ERC-20</p>
       </div>
     </div>
   )
 }
 
-// ─── Quick Actions (only real, working destinations) ──────────
+// â”€â”€â”€ Quick Actions (only real, working destinations) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const QUICK_ACTIONS = [
   { label: 'Deploy Contract', icon: Rocket,    href: '/platform/studio',          color: 'text-accent'         },
@@ -158,20 +158,20 @@ function RecentSection({ title, link, linkLabel }: {
       <div className="flex items-center justify-between border-b border-border-subtle px-5 py-3.5">
         <p className="text-sm font-medium text-text-primary">{title}</p>
         <button onClick={() => router.push(link)} className="text-xs text-interactive hover:text-interactive-hover transition-colors">
-          {linkLabel} →
+          {linkLabel} â†’
         </button>
       </div>
       <div className="px-5 py-5 flex items-center justify-between">
         <p className="text-sm text-text-tertiary">Nothing here yet</p>
         <button onClick={() => router.push(link)} className="text-xs text-interactive hover:text-interactive-hover transition-colors">
-          Get started →
+          Get started â†’
         </button>
       </div>
     </div>
   )
 }
 
-// ─── RIGHT: Network ───────────────────────────────────────────
+// â”€â”€â”€ RIGHT: Network â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function NetworkCard() {
   const { latestBlock, gasPrice, finality, rpcStatus, networkStatus, isLoading } = useArcNetwork()
@@ -204,7 +204,7 @@ function NetworkCard() {
       </div>
       <div className="border-t border-border-subtle px-4 py-3">
         <a href="https://testnet.arcscan.app" target="_blank" rel="noopener noreferrer" className="text-xs text-interactive hover:text-interactive-hover transition-colors">
-          Open ArcScan →
+          Open ArcScan â†’
         </a>
       </div>
     </div>
@@ -238,7 +238,7 @@ function ArcFeaturesCard() {
   )
 }
 
-// ─── PAGE ─────────────────────────────────────────────────────
+// â”€â”€â”€ PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function WorkspacePage() {
   const { isConnected, address } = useAccount()
@@ -261,11 +261,11 @@ export default function WorkspacePage() {
           <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
             {greeting}{address ? `, ${truncateAddress(address, 4)}` : ''}
           </h1>
-          <p className="mt-1 text-sm text-text-secondary">Developer Workspace · Arc Testnet</p>
+          <p className="mt-1 text-sm text-text-secondary">Developer Workspace Â· Arc Testnet</p>
         </div>
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-usdc" aria-label="Connected" />
-          <span className="text-xs text-text-tertiary">Arc Testnet · Connected</span>
+          <span className="text-xs text-text-tertiary">Arc Testnet Â· Connected</span>
         </div>
       </div>
 

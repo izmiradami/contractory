@@ -3,7 +3,7 @@
 import { useAccount }    from 'wagmi'
 import { WalletStatus } from '@/components/blockchain/wallet-status'
 import { EmptyState }   from '@/components/shared/empty-state'
-import { Activity } from 'lucide-react'
+import { Activity, ShieldCheck } from 'lucide-react'
 
 function StatBox({ label, value }: { label: string; value: string | number }) {
   return (
@@ -44,7 +44,7 @@ export default function ProfilePage() {
         </div>
         <div>
           <p className="font-mono text-base font-medium text-text-primary">
-            {address ? `${address.slice(0, 8)}...${address.slice(-6)}` : '—'}
+            {address ? `${address.slice(0, 8)}...${address.slice(-6)}` : 'â€”'}
           </p>
           <p className="text-sm text-text-tertiary">Arc Testnet Developer</p>
         </div>
