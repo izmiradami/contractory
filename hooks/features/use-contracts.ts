@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAccount }                        from 'wagmi'
 import { contractStore }                     from '@/lib/store/contract-store'
-import { DEMO_CONTRACTS }                    from '@/components/contracts/types'
 import type { StoredContract }               from '@/components/contracts/types'
 
 interface UseContractsResult {
@@ -21,9 +20,8 @@ export function useContracts(): UseContractsResult {
   const [error,     setError]     = useState<string | null>(null)
 
   const fetch = useCallback(async () => {
-    // Not connected — show demo data so UI is never empty
     if (!address || !isConnected) {
-      setContracts(DEMO_CONTRACTS)
+      setContracts([])
       return
     }
 
@@ -32,11 +30,10 @@ export function useContracts(): UseContractsResult {
 
     try {
       const data = await contractStore.getByOwner(address)
-      // If user has no contracts yet, show demos as examples
-      setContracts(data.length > 0 ? data : DEMO_CONTRACTS)
+      setContracts(data)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load contracts')
-      setContracts(DEMO_CONTRACTS)  // graceful fallback
+      setContracts([])
     } finally {
       setIsLoading(false)
     }
@@ -49,7 +46,6 @@ export function useContracts(): UseContractsResult {
     try {
       await contractStore.toggleFavorite(id, fav)
     } catch {
-      // Revert optimistic update
       setContracts((prev) => prev.map((c) => c.id === id ? { ...c, isFavorite: !fav } : c))
     }
   }, [])

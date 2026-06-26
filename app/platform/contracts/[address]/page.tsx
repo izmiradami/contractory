@@ -1,12 +1,12 @@
 'use client'
 
-import { use, useState }                  from 'react'
+import { use, useState, useEffect }       from 'react'
 import { useRouter }                      from 'next/navigation'
 import { HealthRing }                     from '@/components/contracts/health-ring'
 import { HealthBreakdownCard, computeBreakdown } from '@/components/contracts/health-breakdown'
 import { FunctionStudio }                 from '@/components/contracts/function-studio'
 import { AiExecutiveSummary, generateFindings }  from '@/components/contracts/ai-summary'
-import { useContracts }                   from '@/hooks/features/use-contracts'
+import { contractStore }                  from '@/lib/store/contract-store'
 import { useContractEvents }              from '@/hooks/features/use-contract-events'
 import { SecurityPanel }                  from '@/components/studio/security-panel'
 import { truncateAddress, formatTimeAgo, copyToClipboard, explorerAddressUrl } from '@/lib/utils'
@@ -18,7 +18,7 @@ import {
   Clock, User, Zap, FileCode, BarChart2,
   Code2,
 } from 'lucide-react'
-import type { AbiItem } from '@/components/contracts/types'
+import type { AbiItem, StoredContract } from '@/components/contracts/types'
 
 // ─── Demo ABI ─────────────────────────────────────────────────
 
@@ -68,29 +68,62 @@ export default function ContractDetailPage({
   const { address } = use(params)
   const router      = useRouter()
 
-  const { contracts, isLoading: _contractsLoading } = useContracts()
-  const contract = contracts.find(
-    (c) => c.address.toLowerCase() === address.toLowerCase()
-  ) ?? contracts[0]
+  const [contract, setContract] = useState<StoredContract | null>(null)
+  const [loadingContract, setLoadingContract] = useState(true)
 
-  const { events: liveEvents, isLoading: _eventsLoading } = useContractEvents(
-    contract?.address
-  )
+  useEffect(() => {
+    let active = true
+    setLoadingContract(true)
+    contractStore.getByAddress(address)
+      .then((c) => { if (active) setContract(c) })
+      .catch(() => { if (active) setContract(null) })
+      .finally(() => { if (active) setLoadingContract(false) })
+    return () => { active = false }
+  }, [address])
+
+  const { events: liveEvents } = useContractEvents(contract?.address)
 
   const [detailTab,  setDetailTab]  = useState<DetailTab>('overview')
   const [rightTab,   setRightTab]   = useState<RightTab>('ai')
   const [aiExplain,  setAiExplain]  = useState<string | null>(null)
 
+  const handleExplain = (name: string) => {
+    setAiExplain(name)
+    setRightTab('ai')
+  }
+
+  if (loadingContract) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-border-subtle border-t-accent" aria-label="Loading" />
+      </div>
+    )
+  }
+
+  if (!contract) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-3 py-32 text-center">
+        <AlertCircle size={28} className="text-text-disabled" aria-hidden="true" />
+        <p className="text-sm font-medium text-text-primary">Contract not found</p>
+        <p className="text-xs text-text-tertiary max-w-sm">
+          This contract is not in your deployments, or it was deployed on a different network.
+        </p>
+        <button
+          onClick={() => router.push('/platform/contracts')}
+          className="mt-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
+        >
+          Back to contracts
+        </button>
+      </div>
+    )
+  }
+
   const findings  = generateFindings(contract.type, contract.verified, contract.health)
+  const realAbi: AbiItem[] = contract.abi ?? []
 
   const handleCopy = async () => {
     await copyToClipboard(contract.address)
     toast.success('Address copied')
-  }
-
-  const handleExplain = (name: string) => {
-    setAiExplain(name)
-    setRightTab('ai')
   }
 
   const DETAIL_TABS: Array<{ id: DetailTab; label: string; icon: React.ElementType }> = [
@@ -264,7 +297,7 @@ export default function ContractDetailPage({
               {/* Function Studio */}
               {detailTab === 'functions' && (
                 <FunctionStudio
-                  abi={DEMO_ABI}
+                  abi={realAbi}
                   address={contract.address}
                   onExplain={handleExplain}
                 />
@@ -281,7 +314,16 @@ export default function ContractDetailPage({
                     </span>
                   </div>
                   <div className="space-y-2">
-                    {(liveEvents.length > 0 ? liveEvents : DEMO_EVENTS).map((ev) => (
+                    {liveEvents.length === 0 && (
+                      <div className="flex flex-col items-center justify-center gap-2 py-10 text-center">
+                        <Activity size={24} className="text-text-disabled" aria-hidden="true" />
+                        <p className="text-sm text-text-tertiary">No events yet</p>
+                        <p className="text-2xs text-text-disabled max-w-xs">
+                          Events emitted by this contract will appear here in real time.
+                        </p>
+                      </div>
+                    )}
+                    {liveEvents.map((ev) => (
                       <div key={ev.id} className="flex items-start gap-3 rounded-lg border border-border-subtle bg-background-tertiary px-4 py-3">
                         <span className="rounded-full bg-accent/10 px-2 py-0.5 text-2xs font-semibold text-accent shrink-0">
                           {ev.name}
@@ -307,31 +349,29 @@ export default function ContractDetailPage({
               {detailTab === 'abi' && (
                 <div>
                   <div className="flex gap-4 mb-4 text-xs font-medium">
-                    <span className="text-interactive">{DEMO_ABI.filter((f) => f.type === 'function').length} functions</span>
-                    <span className="text-accent">{DEMO_ABI.filter((f) => f.type === 'event').length} events</span>
+                    <span className="text-interactive">{realAbi.filter((f) => f.type === 'function').length} functions</span>
+                    <span className="text-accent">{realAbi.filter((f) => f.type === 'event').length} events</span>
                   </div>
                   <pre className="rounded-lg bg-background-primary border border-border-subtle p-4 text-xs font-mono text-text-secondary overflow-auto max-h-80 scrollbar-hide">
-                    {JSON.stringify(DEMO_ABI, null, 2)}
+                    {realAbi.length > 0 ? JSON.stringify(realAbi, null, 2) : '// ABI not available for this contract'}
                   </pre>
                 </div>
               )}
 
               {/* Analytics */}
               {detailTab === 'analytics' && (
-                <div className="grid grid-cols-3 gap-4">
-                  {[
-                    { label: 'Total Calls',    value: '143',        usdc: false },
-                    { label: 'Unique Users',   value: '12',         usdc: false },
-                    { label: 'Gas Spent',      value: '$1.43 USDC', usdc: true  },
-                    { label: 'Events Emitted', value: '89',         usdc: false },
-                    { label: 'Avg Gas/tx',     value: '$0.01 USDC', usdc: true  },
-                    { label: 'Last Activity',  value: '2 min ago',  usdc: false },
-                  ].map(({ label, value, usdc }) => (
-                    <div key={label} className="rounded-xl border border-border-subtle bg-background-tertiary p-4 text-center">
-                      <p className={cn('text-xl font-bold tabular', usdc ? 'text-usdc' : 'text-text-primary')}>{value}</p>
-                      <p className="text-xs font-medium text-text-primary mt-0.5">{label}</p>
-                    </div>
-                  ))}
+                <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+                  <BarChart2 size={28} className="text-text-disabled" aria-hidden="true" />
+                  <div>
+                    <p className="text-sm font-medium text-text-primary">On-chain analytics</p>
+                    <p className="text-xs text-text-tertiary mt-1 max-w-xs">
+                      Per-contract call counts, unique users and gas analytics arrive in v1.1,
+                      once Arc exposes an indexer endpoint. Live events are available in the Events tab.
+                    </p>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-accent-border bg-accent-subtle px-3 py-1 text-2xs font-semibold text-accent">
+                    Coming in v1.1
+                  </span>
                 </div>
               )}
 
@@ -340,7 +380,7 @@ export default function ContractDetailPage({
                 <div className="relative">
                   <div className="absolute left-[22px] top-3 bottom-3 w-px bg-border-subtle" aria-hidden="true" />
                   <div className="space-y-4">
-                    {TIMELINE_EVENTS.map(({ label, time, icon: Icon, color }, i) => (
+                    {[{ label: 'Deployed to Arc Testnet', time: formatTimeAgo(contract.deployedAt), icon: Zap, color: 'text-accent' }, ...(contract.verified ? [{ label: 'Source verified on ArcScan', time: formatTimeAgo(contract.deployedAt), icon: CheckCircle2, color: 'text-usdc' }] : [])].map(({ label, time, icon: Icon, color }, i) => (
                       <div key={i} className="flex items-start gap-4">
                         <div className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-background-elevated border border-border-subtle z-10', color)}>
                           <Icon size={16} aria-hidden="true" />
