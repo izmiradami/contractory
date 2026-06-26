@@ -2,16 +2,15 @@
 
 import { useAccount }        from 'wagmi'
 import { useRouter }         from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect }         from 'react'
 import { useArcNetwork }     from '@/hooks/blockchain/use-arc-network'
 import { useArcBalance }     from '@/hooks/blockchain/use-arc-balance'
-import { useCommandPalette } from '@/components/layout/command-palette/provider'
 import { truncateAddress }   from '@/lib/utils'
 import { cn }                from '@/lib/utils'
 import {
-  Code2, ArrowLeftRight, Bot, Wallet, Search, Layers,
+  Code2, Bot, Wallet, Layers, Settings as SettingsIcon,
   Rocket, Coins, ImageIcon, Zap, Activity,
-  Copy, ExternalLink, ChevronRight, Sparkles, Send
+  Copy, ExternalLink, ChevronRight,
 } from 'lucide-react'
 
 // ─── Helpers ──────────────────────────────────────────────────
@@ -27,15 +26,13 @@ function StatusDot({ status }: { status: 'healthy' | 'degraded' | 'down' }) {
   )
 }
 
-// ─── LEFT: Workspace Nav ──────────────────────────────────────
+// ─── LEFT: Workspace Nav (only real, working pages) ───────────
 
 const WORKSPACE_ITEMS = [
-  { label: 'Contract Studio', icon: Code2,         href: '/platform/studio',    desc: 'Deploy & verify' },
-  { label: 'AI Agents',       icon: Bot,            href: '/platform/agents',    desc: 'ERC-8004' },
-  { label: 'Bridge USDC',     icon: ArrowLeftRight, href: '/platform/bridge',    desc: 'Cross-chain' },
-  { label: 'Unified Balance', icon: Wallet,         href: '/platform/balance',   desc: 'All chains' },
-  { label: 'Explorer',        icon: Search,         href: '/platform/explorer',  desc: 'Blocks & txs' },
-  { label: 'Templates',       icon: Layers,         href: '/platform/templates', desc: 'Start fast' },
+  { label: 'Contract Studio',  icon: Code2,        href: '/platform/studio',    desc: 'Write, compile & deploy' },
+  { label: 'My Contracts',     icon: Layers,       href: '/platform/contracts', desc: 'Manage deployments' },
+  { label: 'AI Agents',        icon: Bot,          href: '/platform/agents',    desc: 'ERC-8004 identity' },
+  { label: 'Settings',         icon: SettingsIcon, href: '/platform/settings',  desc: 'Preferences' },
 ]
 
 function WorkspaceNav() {
@@ -44,7 +41,7 @@ function WorkspaceNav() {
     <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
       <div className="border-b border-border-subtle px-4 py-3">
         <p className="text-sm font-semibold text-text-primary">Workspace</p>
-        <p className="text-2xs text-text-tertiary mt-0.5">Developer Operating System for Arc</p>
+        <p className="text-2xs text-text-tertiary mt-0.5">Smart contract development for Arc</p>
       </div>
       <nav aria-label="Workspace navigation">
         {WORKSPACE_ITEMS.map(({ label, icon: Icon, href, desc }) => (
@@ -73,25 +70,8 @@ function WorkspaceNav() {
 function WalletCard() {
   const { address, isConnected, chain } = useAccount()
   const { formatted, isLoading }        = useArcBalance()
-  const { open: openPalette }           = useCommandPalette()
 
-  if (!isConnected) {
-    return (
-      <div className="rounded-xl border border-border-subtle bg-background-secondary p-6 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-subtle border border-accent-border mx-auto mb-3">
-          <Wallet size={22} className="text-accent" aria-hidden="true" />
-        </div>
-        <p className="text-sm font-medium text-text-primary mb-1">Connect your wallet</p>
-        <p className="text-xs text-text-tertiary mb-4">Connect to start building on Arc</p>
-        <button
-          onClick={openPalette}
-          className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
-        >
-          Connect wallet
-        </button>
-      </div>
-    )
-  }
+  if (!isConnected) return null
 
   return (
     <div className="rounded-xl border border-border-subtle bg-background-secondary p-5">
@@ -111,10 +91,14 @@ function WalletCard() {
           </div>
         </div>
         <div className="flex items-center gap-1">
-          <button aria-label="Copy address" className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:bg-background-tertiary hover:text-text-secondary transition-colors">
+          <button
+            aria-label="Copy address"
+            onClick={() => address && navigator.clipboard.writeText(address)}
+            className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:bg-background-tertiary hover:text-text-secondary transition-colors"
+          >
             <Copy size={13} aria-hidden="true" />
           </button>
-          <a href="https://testnet.arcscan.app" target="_blank" rel="noopener noreferrer" aria-label="View on explorer" className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:bg-background-tertiary hover:text-text-secondary transition-colors">
+          <a href={address ? `https://testnet.arcscan.app/address/${address}` : 'https://testnet.arcscan.app'} target="_blank" rel="noopener noreferrer" aria-label="View on explorer" className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary hover:bg-background-tertiary hover:text-text-secondary transition-colors">
             <ExternalLink size={13} aria-hidden="true" />
           </a>
         </div>
@@ -130,15 +114,15 @@ function WalletCard() {
   )
 }
 
-// ─── Quick Actions ────────────────────────────────────────────
+// ─── Quick Actions (only real, working destinations) ──────────
 
 const QUICK_ACTIONS = [
-  { label: 'Deploy Contract', icon: Rocket,         href: '/platform/studio',           color: 'text-accent'         },
-  { label: 'Bridge USDC',     icon: ArrowLeftRight, href: '/platform/bridge',           color: 'text-usdc'           },
-  { label: 'Create ERC20',    icon: Coins,          href: '/platform/studio?t=erc20',   color: 'text-interactive'    },
-  { label: 'Create NFT',      icon: ImageIcon,      href: '/platform/studio?t=erc721',  color: 'text-status-warning' },
-  { label: 'AI Agent',        icon: Bot,            href: '/platform/agents',           color: 'text-accent'         },
-  { label: 'Explorer',        icon: Search,         href: '/platform/explorer',         color: 'text-text-tertiary'  },
+  { label: 'Deploy Contract', icon: Rocket,    href: '/platform/studio',          color: 'text-accent'         },
+  { label: 'Create ERC20',    icon: Coins,     href: '/platform/studio?t=erc20',  color: 'text-interactive'    },
+  { label: 'Create NFT',      icon: ImageIcon, href: '/platform/studio?t=erc721', color: 'text-status-warning' },
+  { label: 'My Contracts',    icon: Layers,    href: '/platform/contracts',       color: 'text-usdc'           },
+  { label: 'AI Agents',       icon: Bot,       href: '/platform/agents',          color: 'text-accent'         },
+  { label: 'Settings',        icon: SettingsIcon, href: '/platform/settings',     color: 'text-text-tertiary'  },
 ]
 
 function QuickActions() {
@@ -165,27 +149,8 @@ function QuickActions() {
   )
 }
 
-function MiniStats() {
-  const stats = [
-    { label: 'Contracts',    value: '0'     },
-    { label: 'Transactions', value: '0'     },
-    { label: 'Gas spent',    value: '$0.00', accent: true },
-    { label: 'AI Agents',    value: '0'     },
-  ]
-  return (
-    <div className="grid grid-cols-4 gap-3">
-      {stats.map(({ label, value, accent }) => (
-        <div key={label} className="rounded-xl border border-border-subtle bg-background-secondary px-4 py-3 text-center">
-          <p className={cn('text-lg font-semibold tabular', accent ? 'text-usdc' : 'text-text-primary')}>{value}</p>
-          <p className="text-2xs text-text-tertiary mt-0.5">{label}</p>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function RecentSection({ title, link, linkLabel, empty }: {
-  title: string; link: string; linkLabel: string; empty: boolean
+function RecentSection({ title, link, linkLabel }: {
+  title: string; link: string; linkLabel: string
 }) {
   const router = useRouter()
   return (
@@ -196,60 +161,10 @@ function RecentSection({ title, link, linkLabel, empty }: {
           {linkLabel} →
         </button>
       </div>
-      {empty && (
-        <div className="px-5 py-5 flex items-center justify-between">
-          <p className="text-sm text-text-tertiary">Nothing here yet</p>
-          <button onClick={() => router.push(link)} className="text-xs text-interactive hover:text-interactive-hover transition-colors">
-            Get started →
-          </button>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function AiAssistantCard() {
-  const [query, setQuery] = useState('')
-  const router = useRouter()
-  const suggestions = [
-    'Why did my deployment fail?',
-    'Generate an ERC20 token.',
-    'Estimate gas for deploy.',
-    'Check Arc compatibility.',
-  ]
-  return (
-    <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
-      <div className="border-b border-border-subtle px-5 py-3.5 flex items-center gap-2">
-        <Sparkles size={14} className="text-accent" aria-hidden="true" />
-        <p className="text-sm font-medium text-text-primary">Ask Contractory</p>
-        <span className="ml-auto rounded-full bg-accent-subtle px-2 py-0.5 text-2xs font-medium text-accent">AI</span>
-      </div>
-      <div className="p-4 space-y-1.5">
-        {suggestions.map((s) => (
-          <button
-            key={s}
-            onClick={() => setQuery(s)}
-            className="w-full text-left rounded-lg border border-border-subtle bg-background-tertiary px-3 py-2 text-xs text-text-secondary hover:border-border-default hover:text-text-primary transition-colors"
-          >
-            {s}
-          </button>
-        ))}
-      </div>
-      <div className="border-t border-border-subtle px-3 py-3 flex items-center gap-2">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Ask anything about Arc..."
-          aria-label="Ask the AI assistant"
-          className="flex-1 bg-transparent text-sm text-text-primary placeholder:text-text-tertiary outline-none"
-        />
-        <button
-          onClick={() => router.push(`/platform/assistant${query ? `?q=${encodeURIComponent(query)}` : ''}`)}
-          className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-white hover:bg-accent-hover transition-colors"
-          aria-label="Open AI assistant"
-        >
-          <Send size={13} aria-hidden="true" />
+      <div className="px-5 py-5 flex items-center justify-between">
+        <p className="text-sm text-text-tertiary">Nothing here yet</p>
+        <button onClick={() => router.push(link)} className="text-xs text-interactive hover:text-interactive-hover transition-colors">
+          Get started →
         </button>
       </div>
     </div>
@@ -271,6 +186,7 @@ function NetworkCard() {
     <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
       <div className="border-b border-border-subtle px-4 py-3.5 flex items-center justify-between">
         <div>
+          <p className="text-sm font-medium text-text-primary">Arc Testnet</p>
           <p className="text-2xs text-text-tertiary mt-0.5">Chain ID 5042002</p>
         </div>
         <StatusDot status={networkStatus} />
@@ -287,8 +203,8 @@ function NetworkCard() {
         ))}
       </div>
       <div className="border-t border-border-subtle px-4 py-3">
-        <a href="https://testnet.arcscan.app/gas-tracker" target="_blank" rel="noopener noreferrer" className="text-xs text-interactive hover:text-interactive-hover transition-colors">
-          Gas tracker →
+        <a href="https://testnet.arcscan.app" target="_blank" rel="noopener noreferrer" className="text-xs text-interactive hover:text-interactive-hover transition-colors">
+          Open ArcScan →
         </a>
       </div>
     </div>
@@ -362,12 +278,8 @@ export default function WorkspacePage() {
         {/* CENTER */}
         <div className="space-y-4 min-w-0">
           <WalletCard />
-          <MiniStats />
           <QuickActions />
-          <RecentSection title="Recent Contracts"    link="/platform/contracts" linkLabel="View all" empty />
-          <RecentSection title="Recent Transactions" link="/platform/explorer"  linkLabel="View all" empty />
-          <RecentSection title="Recent Events"       link="/platform/events"    linkLabel="View all" empty />
-          <AiAssistantCard />
+          <RecentSection title="Recent Contracts" link="/platform/contracts" linkLabel="View all" />
         </div>
 
         {/* RIGHT */}
