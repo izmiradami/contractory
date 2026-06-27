@@ -14,10 +14,12 @@ interface Finding {
   detail:     string
   fixable:    boolean
   fixLabel?:  string
+  href?:      string
 }
 
 interface AiSummaryProps {
   contractName: string  // reserved for future use
+  contractAddress: string
   contractType: string
   verified:     boolean
   health:       number
@@ -125,6 +127,7 @@ const LEVEL_CONFIG = {
 
 export function AiExecutiveSummary({
   contractName: _contractName,
+  contractAddress,
   contractType,
   verified,
   health,
@@ -160,9 +163,9 @@ export function AiExecutiveSummary({
             : `${findings.filter((f) => f.level === 'critical').length} critical issue(s) found. `
           }
           {contractType === 'ERC20'
-            ? 'Ownership is centralized — the owner can mint unlimited tokens. Consider adding ERC20Capped to limit total supply. Adding ERC20Permit support would improve wallet UX for gasless approvals.'
+            ? 'Ownership is centralized ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â the owner can mint unlimited tokens. Consider adding ERC20Capped to limit total supply. Adding ERC20Permit support would improve wallet UX for gasless approvals.'
             : contractType === 'ERC721'
-            ? 'Source code not verified — this reduces trust. Consider verifying on ArcScan. No randomness vulnerabilities found (good — PREVRANDAO = 0 on Arc).'
+            ? 'Source code not verified ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â this reduces trust. Consider verifying on ArcScan. No randomness vulnerabilities found (good ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â PREVRANDAO = 0 on Arc).'
             : 'Contract is functional and Arc-compatible.'
           }
         </p>
@@ -184,7 +187,21 @@ export function AiExecutiveSummary({
                   </span>
                 </div>
                 <p className="text-xs text-text-secondary leading-relaxed pl-4 mb-2">{f.detail}</p>
-                {f.fixable && <div className="pl-4"><OneCLickFix finding={f} /></div>}
+                {f.href ? (
+                  <div className="pl-4">
+                    <a
+                      href={f.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-md bg-accent px-2.5 py-1.5 text-2xs font-medium text-white hover:bg-accent-hover transition-colors"
+                    >
+                      <ExternalLink size={11} aria-hidden="true" />
+                      {f.fixLabel ?? 'Open'}
+                    </a>
+                  </div>
+                ) : f.fixable ? (
+                  <div className="pl-4"><OneCLickFix finding={f} /></div>
+                ) : null}
               </div>
             )
           })}
@@ -204,11 +221,12 @@ export function AiExecutiveSummary({
   )
 }
 
-// Factory — generate findings from contract data
+// Factory ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â generate findings from contract data
 export function generateFindings(
   contractType: string,
   verified: boolean,
-  health: number
+  health: number,
+  address: string
 ): Finding[] {
   const findings: Finding[] = []
 
@@ -217,8 +235,9 @@ export function generateFindings(
       level:     'warning',
       title:     'Source code not verified',
       detail:    'Users and auditors cannot inspect the contract logic. Verifying increases trust and ArcScan discoverability.',
-      fixable:   true,
+      fixable:   false,
       fixLabel:  'Verify on ArcScan',
+      href:      `https://testnet.arcscan.app/address/${address}#code`,
     })
   }
 
@@ -242,7 +261,7 @@ export function generateFindings(
     findings.push({
       level:   'info',
       title:   'Randomness check passed',
-      detail:  'No PREVRANDAO usage detected. Arc always returns 0 for PREVRANDAO — using an oracle for randomness is the correct approach.',
+      detail:  'No PREVRANDAO usage detected. Arc always returns 0 for PREVRANDAO ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â using an oracle for randomness is the correct approach.',
       fixable: false,
     })
   }

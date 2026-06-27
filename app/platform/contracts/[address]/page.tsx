@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 import type { AbiItem, StoredContract } from '@/components/contracts/types'
 
-// ─── Demo ABI ─────────────────────────────────────────────────
+// â”€â”€â”€ Demo ABI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const DEMO_ABI: AbiItem[] = [
   { name: 'balanceOf',         type: 'function', stateMutability: 'view',        inputs: [{ name: 'account', type: 'address' }],                                                                           outputs: [{ name: '', type: 'uint256' }] },
@@ -53,12 +53,12 @@ const TIMELINE_EVENTS = [
   { label: 'Transfer emitted',  time: '2 min ago',     icon: Activity,     color: 'text-interactive'    },
 ]
 
-// ─── Types ────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type DetailTab = 'overview' | 'functions' | 'events' | 'abi' | 'analytics' | 'timeline'
 type RightTab  = 'ai' | 'health' | 'security' | 'gas'
 
-// ─── Page ─────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function ContractDetailPage({
   params,
@@ -118,7 +118,7 @@ export default function ContractDetailPage({
     )
   }
 
-  const findings  = generateFindings(contract.type, contract.verified, contract.health)
+  const findings  = generateFindings(contract.type, contract.verified, contract.health, contract.address)
   const realAbi: AbiItem[] = contract.abi ?? []
 
   const handleCopy = async () => {
@@ -145,7 +145,7 @@ export default function ContractDetailPage({
   return (
     <div className="animate-fade-in-up space-y-5">
 
-      {/* ── Breadcrumb ── */}
+      {/* â”€â”€ Breadcrumb â”€â”€ */}
       <div className="flex items-center gap-3">
         <button
           onClick={() => router.push('/platform/contracts')}
@@ -172,7 +172,7 @@ export default function ContractDetailPage({
         </div>
       </div>
 
-      {/* ── Identity bar ── */}
+      {/* â”€â”€ Identity bar â”€â”€ */}
       <div className="rounded-xl border border-border-subtle bg-background-secondary px-5 py-4">
         <div className="flex items-center gap-5">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-subtle border border-accent-border">
@@ -189,7 +189,7 @@ export default function ContractDetailPage({
                 : <span className="flex items-center gap-1 text-2xs text-status-error"><AlertCircle size={11} aria-hidden="true" />Unverified</span>
               }
               <span className={cn('text-2xs capitalize', contract.status === 'active' ? 'text-usdc' : 'text-text-tertiary')}>
-                ● {contract.status}
+                â— {contract.status}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -206,15 +206,16 @@ export default function ContractDetailPage({
         </div>
       </div>
 
-      {/* ── Main 2-col layout ── */}
+      {/* â”€â”€ Main 2-col layout â”€â”€ */}
       <div className="flex gap-5 items-start">
 
-        {/* ── LEFT: Content ── */}
+        {/* â”€â”€ LEFT: Content â”€â”€ */}
         <div className="flex-1 min-w-0 space-y-4">
 
-          {/* AI Executive Summary — always visible */}
+          {/* AI Executive Summary â€” always visible */}
           <AiExecutiveSummary
             contractName={contract.name}
+            contractAddress={contract.address}
             contractType={contract.type}
             verified={contract.verified}
             health={contract.health}
@@ -396,7 +397,7 @@ export default function ContractDetailPage({
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-usdc/10 border border-usdc-border z-10">
                         <span className="h-3 w-3 rounded-full bg-usdc animate-pulse" aria-hidden="true" />
                       </div>
-                      <p className="text-sm font-semibold text-usdc">Now — monitoring</p>
+                      <p className="text-sm font-semibold text-usdc">Now â€” monitoring</p>
                     </div>
                   </div>
                 </div>
@@ -406,7 +407,7 @@ export default function ContractDetailPage({
           </div>
         </div>
 
-        {/* ── RIGHT: Intelligence Panel ── */}
+        {/* â”€â”€ RIGHT: Intelligence Panel â”€â”€ */}
         <div className="w-72 shrink-0 space-y-4">
           <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
             {/* Tab bar */}
@@ -439,7 +440,7 @@ export default function ContractDetailPage({
                         <p className="text-xs font-medium text-text-primary">
                           Explain: <code className="text-accent">{aiExplain}()</code>
                         </p>
-                        <button onClick={() => setAiExplain(null)} className="text-2xs text-text-tertiary hover:text-text-secondary">✕</button>
+                        <button onClick={() => setAiExplain(null)} className="text-2xs text-text-tertiary hover:text-text-secondary">âœ•</button>
                       </div>
                       <div className="rounded-lg border border-accent-border bg-accent-subtle p-3">
                         <p className="text-xs text-text-primary leading-relaxed">
