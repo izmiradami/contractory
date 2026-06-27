@@ -42,7 +42,7 @@ function Hero() {
         </h1>
         <p className="mt-2 text-sm text-text-secondary leading-relaxed max-w-xl">
           Write, compile, analyze and deploy Arc-compatible contracts with USDC-native gas
-          and sub-second finality — all from one workspace.
+          and sub-second finality â€” all from one workspace.
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <button
@@ -68,10 +68,10 @@ function Hero() {
 // --- Premium Quick Actions ---
 
 const QUICK_ACTIONS = [
-  { icon: Rocket,    title: 'New Contract',        desc: 'Start from an Arc-ready template',      href: '/platform/studio',    color: 'text-accent' },
-  { icon: Code2,     title: 'Open Contract Studio', desc: 'Write, compile and deploy',            href: '/platform/studio',    color: 'text-interactive' },
-  { icon: Layers,    title: 'My Contracts',        desc: 'Manage your deployments',               href: '/platform/contracts', color: 'text-usdc' },
-  { icon: ShieldCheck, title: 'AI Review',         desc: 'Check compatibility and security',      href: '/platform/studio',    color: 'text-status-warning' },
+  { icon: Coins,     title: 'Create ERC20 Token',  desc: 'Fungible token with mint and burn',     href: '/platform/studio?template=erc20-basic',   color: 'text-accent' },
+  { icon: ImageIcon, title: 'Create NFT',          desc: 'ERC721 collection with token URIs',     href: '/platform/studio?template=erc721-basic',  color: 'text-interactive' },
+  { icon: Layers,    title: 'Multi-token (ERC1155)', desc: 'Batch operations and multiple types',  href: '/platform/studio?template=erc1155-basic', color: 'text-usdc' },
+  { icon: Code2,     title: 'Open Contract Studio', desc: 'Write, compile and deploy from scratch', href: '/platform/studio',                        color: 'text-status-warning' },
 ]
 
 function QuickActions() {
@@ -221,7 +221,7 @@ const DEV_TIPS = [
   { title: 'Use the ERC20 template', desc: 'Start from an audited, Arc-ready ERC20 in Contract Studio.' },
   { title: 'Verify every deployment', desc: 'Verified contracts build trust and unlock ArcScan source view.' },
   { title: 'Review compatibility first', desc: 'Aim for 100/100 on the Arc Analyzer before you deploy.' },
-  { title: 'Gas is paid in USDC', desc: 'No volatile gas token — costs stay predictable at ~$0.01 / tx.' },
+  { title: 'Gas is paid in USDC', desc: 'No volatile gas token â€” costs stay predictable at ~$0.01 / tx.' },
 ]
 
 function DeveloperTips() {
