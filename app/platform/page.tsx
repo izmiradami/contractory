@@ -5,6 +5,7 @@ import { useRouter }         from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useArcNetwork }     from '@/hooks/blockchain/use-arc-network'
 import { useArcBalance }     from '@/hooks/blockchain/use-arc-balance'
+import { useContracts }      from '@/hooks/features/use-contracts'
 import { truncateAddress }   from '@/lib/utils'
 import { cn }                from '@/lib/utils'
 import {
@@ -42,7 +43,7 @@ function Hero() {
         </h1>
         <p className="mt-2 text-sm text-text-secondary leading-relaxed max-w-xl">
           Write, compile, analyze and deploy Arc-compatible contracts with USDC-native gas
-          and sub-second finality â€” all from one workspace.
+          and sub-second finality ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â all from one workspace.
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <button
@@ -147,6 +148,8 @@ function WalletCard() {
 
 function RecentContracts() {
   const router = useRouter()
+  const { contracts, isLoading } = useContracts()
+
   return (
     <div className="rounded-xl border border-border-subtle bg-background-secondary overflow-hidden">
       <div className="flex items-center justify-between border-b border-border-subtle px-5 py-3.5">
@@ -155,22 +158,55 @@ function RecentContracts() {
           View all
         </button>
       </div>
-      <div className="flex flex-col items-center justify-center gap-3 px-5 py-12 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-border-subtle bg-background-tertiary">
-          <FileCode size={22} className="text-text-disabled" aria-hidden="true" />
+
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-border-subtle border-t-accent" aria-label="Loading" />
         </div>
-        <div>
-          <p className="text-sm font-medium text-text-primary">No contracts deployed yet</p>
-          <p className="mt-1 text-xs text-text-tertiary">Deploy your first smart contract on Arc.</p>
+      ) : contracts.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-3 px-5 py-12 text-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-border-subtle bg-background-tertiary">
+            <FileCode size={22} className="text-text-disabled" aria-hidden="true" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-text-primary">No contracts deployed yet</p>
+            <p className="mt-1 text-xs text-text-tertiary">Deploy your first smart contract on Arc.</p>
+          </div>
+          <button
+            onClick={() => router.push('/platform/studio')}
+            className="mt-1 inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
+          >
+            <Rocket size={14} aria-hidden="true" />
+            Create Contract
+          </button>
         </div>
-        <button
-          onClick={() => router.push('/platform/studio')}
-          className="mt-1 inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
-        >
-          <Rocket size={14} aria-hidden="true" />
-          Create Contract
-        </button>
-      </div>
+      ) : (
+        <div className="divide-y divide-border-subtle">
+          {contracts.slice(0, 5).map((contract) => (
+            <button
+              key={contract.id}
+              onClick={() => router.push(`/platform/contracts/${contract.address}`)}
+              className="flex w-full items-center justify-between px-5 py-3.5 text-left hover:bg-background-tertiary transition-colors"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-background-tertiary">
+                  <FileCode size={16} className="text-accent" aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-text-primary">{contract.name || 'Untitled contract'}</p>
+                  <p className="truncate font-mono text-2xs text-text-tertiary">{truncateAddress(contract.address, 6)}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                {contract.verified && (
+                  <span className="rounded-full border border-usdc-border bg-usdc-subtle px-2 py-0.5 text-2xs font-medium text-usdc">Verified</span>
+                )}
+                <ExternalLink size={13} className="text-text-tertiary" aria-hidden="true" />
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -221,7 +257,7 @@ const DEV_TIPS = [
   { title: 'Use the ERC20 template', desc: 'Start from an audited, Arc-ready ERC20 in Contract Studio.' },
   { title: 'Verify every deployment', desc: 'Verified contracts build trust and unlock ArcScan source view.' },
   { title: 'Review compatibility first', desc: 'Aim for 100/100 on the Arc Analyzer before you deploy.' },
-  { title: 'Gas is paid in USDC', desc: 'No volatile gas token â€” costs stay predictable at ~$0.01 / tx.' },
+  { title: 'Gas is paid in USDC', desc: 'No volatile gas token ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â costs stay predictable at ~$0.01 / tx.' },
 ]
 
 function DeveloperTips() {
