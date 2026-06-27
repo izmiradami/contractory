@@ -1,4 +1,4 @@
-// Contractory — Arc Blockchain Adapter (Primary)
+// Contractory â€” Arc Blockchain Adapter (Primary)
 // Full implementation of the BlockchainAdapter interface for Arc Testnet.
 // Based on official Arc documentation: https://docs.arc.io
 
@@ -9,14 +9,14 @@ import type {
   UsdcUtils,
 } from '../../core/interface'
 
-// ─── Arc Constants ────────────────────────────────────────────────────────
+// â”€â”€â”€ Arc Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const ARC_CHAIN_ID = 5042002  // Arc Testnet chain ID
 
 export const ARC_CONTRACTS = {
-  // Native USDC — ERC-20 interface for the native gas token
+  // Native USDC â€” ERC-20 interface for the native gas token
   USDC:                   '0x3600000000000000000000000000000000000000',
-  // EURC — euro-denominated stablecoin
+  // EURC â€” euro-denominated stablecoin
   EURC:                   '0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a',
   // CCTP v2 (domain 26)
   CCTP_TOKEN_MESSENGER:   '0x8FE6B999Dc680CcFDD5Bf7EB0974218be2542DAA',
@@ -43,10 +43,10 @@ export const ARC_GAS = {
   THROUGHPUT_GAS_SEC:  20_000_000, // 20M gas/sec
 } as const
 
-// ─── USDC Utilities ───────────────────────────────────────────────────────
+// â”€â”€â”€ USDC Utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // CRITICAL: Arc has two USDC representations:
-//   Native:  18 decimals — used for gas accounting and msg.value
-//   ERC-20:  6  decimals — used for balanceOf, transfer, display
+//   Native:  18 decimals â€” used for gas accounting and msg.value
+//   ERC-20:  6  decimals â€” used for balanceOf, transfer, display
 // NEVER compare or mix them without conversion.
 
 const NATIVE_TO_ERC20_FACTOR = 10n ** 12n  // 10^(18-6)
@@ -77,10 +77,10 @@ export const arcUsdc: UsdcUtils = {
   },
 }
 
-// ─── Gas Formatting ───────────────────────────────────────────────────────
+// â”€â”€â”€ Gas Formatting â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function arcFormatGas(gasUsed: bigint, gasPriceWei: bigint): GasDisplay {
-  // gasUsed × gasPriceWei = cost in native USDC (18 decimals)
+  // ---
   const costNative = gasUsed * gasPriceWei
   const costErc20  = arcUsdc.toErc20(costNative)
   const formatted  = arcUsdc.format(costErc20)
@@ -94,7 +94,7 @@ function arcFormatGas(gasUsed: bigint, gasPriceWei: bigint): GasDisplay {
   }
 }
 
-// ─── Arc Compatibility Analyzer ───────────────────────────────────────────
+// â”€â”€â”€ Arc Compatibility Analyzer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Analyzes Solidity source for Arc-specific incompatibilities.
 // Flags patterns that work on Ethereum but fail or behave differently on Arc.
 
@@ -121,7 +121,7 @@ export function analyzeArcCompatibility(source: string): CompatibilityIssue[] {
     })
   }
 
-  // PREVRANDAO / block.difficulty → always 0 on Arc
+  // PREVRANDAO / block.difficulty â†’ always 0 on Arc
   check(/\bPREVRANDAO\b|\bblock\.difficulty\b|\bblock\.prevrandao\b/, {
     severity: 'error',
     pattern: 'PREVRANDAO',
@@ -184,7 +184,7 @@ export function analyzeArcCompatibility(source: string): CompatibilityIssue[] {
     })
   }
 
-  // Beacon root (EIP-4788) — returns 0 on Arc
+  // Beacon root (EIP-4788) â€” returns 0 on Arc
   check(/\bparentBeaconBlockRoot\b|BEACON_ROOTS/, {
     severity: 'warning',
     pattern: 'Beacon root (EIP-4788)',
@@ -205,7 +205,7 @@ export function analyzeArcCompatibility(source: string): CompatibilityIssue[] {
   return issues
 }
 
-// ─── Arc Adapter ─────────────────────────────────────────────────────────
+// â”€â”€â”€ Arc Adapter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const arcAdapter: BlockchainAdapter = {
   id:      'arc',

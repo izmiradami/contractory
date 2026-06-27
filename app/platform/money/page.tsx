@@ -7,7 +7,7 @@ import {
   CheckCircle2, Clock, Sparkles, ShieldCheck,
 } from 'lucide-react'
 
-// â”€â”€â”€ Preview feature cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ---
 
 const PREVIEW_FEATURES = [
   {
@@ -42,7 +42,7 @@ const PREVIEW_FEATURES = [
   },
 ]
 
-// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ---
 
 export default function PaymentsHubPage() {
   const { formatted, isLoading } = useArcBalance()
@@ -55,7 +55,7 @@ export default function PaymentsHubPage() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-text-primary">Payments Hub</h1>
           <p className="mt-1 text-sm text-text-secondary">
-            Programmable money on Arc â€” send, bridge, swap and automate USDC
+            Programmable money on Arc · send, bridge, swap and automate USDC
           </p>
         </div>
         <div className="rounded-lg border border-usdc-border bg-usdc-subtle px-3 py-2 text-right">
@@ -85,8 +85,8 @@ export default function PaymentsHubPage() {
           </h2>
           <p className="mx-auto max-w-xl text-sm text-text-secondary leading-relaxed">
             Contractory v1.0 is focused on being the best place to build, deploy and manage
-            smart contracts on Arc. Full USDC payments â€” sending, bridging, swapping and
-            automations â€” will arrive in upcoming releases as the Arc ecosystem matures.
+            smart contracts on Arc. Full USDC payments · sending, bridging, swapping and
+            automations · will arrive in upcoming releases as the Arc ecosystem matures.
           </p>
         </div>
       </div>
@@ -125,10 +125,10 @@ export default function PaymentsHubPage() {
         </div>
         <div className="divide-y divide-border-subtle">
           {[
-            'Contract Studio â€” write, compile and deploy Solidity to Arc Testnet',
+            'Contract Studio · write, compile and deploy Solidity to Arc Testnet',
             'Arc Compatibility Analyzer, Security Scanner and Gas Estimator',
             'ArcScan verification built into the deploy flow',
-            'Contract Control Center â€” manage your deployed contracts with real data',
+            'Contract Control Center · manage your deployed contracts with real data',
           ].map((item) => (
             <div key={item} className="flex items-center gap-3 px-5 py-3">
               <CheckCircle2 size={15} className="text-usdc shrink-0" aria-hidden="true" />

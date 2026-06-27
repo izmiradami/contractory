@@ -163,9 +163,9 @@ export function AiExecutiveSummary({
             : `${findings.filter((f) => f.level === 'critical').length} critical issue(s) found. `
           }
           {contractType === 'ERC20'
-            ? 'Ownership is centralized ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â the owner can mint unlimited tokens. Consider adding ERC20Capped to limit total supply. Adding ERC20Permit support would improve wallet UX for gasless approvals.'
+            ? 'Ownership is centralized · · the owner can mint unlimited tokens. Consider adding ERC20Capped to limit total supply. Adding ERC20Permit support would improve wallet UX for gasless approvals.'
             : contractType === 'ERC721'
-            ? 'Source code not verified ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â this reduces trust. Consider verifying on ArcScan. No randomness vulnerabilities found (good ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â PREVRANDAO = 0 on Arc).'
+            ? 'Source code not verified · · this reduces trust. Consider verifying on ArcScan. No randomness vulnerabilities found (good · · PREVRANDAO = 0 on Arc).'
             : 'Contract is functional and Arc-compatible.'
           }
         </p>
@@ -221,7 +221,7 @@ export function AiExecutiveSummary({
   )
 }
 
-// Factory ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â generate findings from contract data
+// ---
 export function generateFindings(
   contractType: string,
   verified: boolean,
@@ -261,7 +261,7 @@ export function generateFindings(
     findings.push({
       level:   'info',
       title:   'Randomness check passed',
-      detail:  'No PREVRANDAO usage detected. Arc always returns 0 for PREVRANDAO ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â using an oracle for randomness is the correct approach.',
+      detail:  'No PREVRANDAO usage detected. Arc always returns 0 for PREVRANDAO · · using an oracle for randomness is the correct approach.',
       fixable: false,
     })
   }

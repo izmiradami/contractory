@@ -257,7 +257,7 @@ const DEV_TIPS = [
   { title: 'Use the ERC20 template', desc: 'Start from an audited, Arc-ready ERC20 in Contract Studio.' },
   { title: 'Verify every deployment', desc: 'Verified contracts build trust and unlock ArcScan source view.' },
   { title: 'Review compatibility first', desc: 'Aim for 100/100 on the Arc Analyzer before you deploy.' },
-  { title: 'Gas is paid in USDC', desc: 'No volatile gas token ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â costs stay predictable at ~$0.01 / tx.' },
+  { title: 'Gas is paid in USDC', desc: 'No volatile gas token · costs stay predictable at ~$0.01 / tx.' },
 ]
 
 function DeveloperTips() {

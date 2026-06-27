@@ -64,7 +64,7 @@ export default function ConnectPage() {
           </div>
 
           <p className="mt-4 text-center text-xs text-text-tertiary">
-            MetaMask Â· Rabby Â· Coinbase Wallet Â· WalletConnect
+            MetaMask · Rabby · Coinbase Wallet · WalletConnect
           </p>
         </div>
 

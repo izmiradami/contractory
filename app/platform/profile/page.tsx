@@ -44,7 +44,7 @@ export default function ProfilePage() {
         </div>
         <div>
           <p className="font-mono text-base font-medium text-text-primary">
-            {address ? `${address.slice(0, 8)}...${address.slice(-6)}` : 'â€”'}
+            {address ? `${address.slice(0, 8)}...${address.slice(-6)}` : '·'}
           </p>
           <p className="text-sm text-text-tertiary">Arc Testnet Developer</p>
         </div>
