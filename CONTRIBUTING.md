@@ -1,51 +1,33 @@
 # Contributing to Contractory
 
-Thank you for your interest in contributing!
+Thanks for your interest in improving Contractory! Contributions of all kinds are welcome — bug reports, fixes, documentation and features that fit the project''s scope.
 
-## Development Setup
+## Getting started
 
-```bash
-git clone https://github.com/woodstonestudio/contractory
-cd contractory
-npm install
-cp .env.example .env.local
-# Fill in .env.local
-npm run dev
-```
+1. Fork the repository and clone your fork.
+2. Install dependencies with `npm install`.
+3. Copy `.env.example` to `.env.local` and fill in your values.
+4. Run `npm run dev` and make your changes.
+5. Run `npm run build` to confirm the project builds cleanly.
 
-## Code Style
+## Pull requests
 
-- TypeScript strict mode — no `any` without justification
-- Tailwind CSS for styling — no inline styles
-- Named exports for components
-- `cn()` for conditional classes (never template literals)
-- Error boundaries on all async UI
+- Keep pull requests focused on a single change.
+- Write clear commit messages (e.g. `fix: handle empty contract list`).
+- Make sure `npm run build` passes before opening a PR.
+- Describe what your change does and why.
 
-## Commit Convention
+## Code style
 
-```
-feat: add contract health breakdown
-fix: correct USDC decimal conversion
-docs: update deployment guide
-test: add Arc compatibility analyzer tests
-refactor: extract function studio component
-```
+- TypeScript and React function components.
+- Follow the existing folder structure and naming conventions.
+- Prefer small, composable components.
+- No mock data or fake on-chain interactions — features are either real or shown as a "Coming Soon" preview.
 
-## Pull Request Process
+## Reporting bugs
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feat/your-feature`
-3. Ensure `npm run type-check && npm run lint && npm run test` all pass
-4. Open a PR with a clear description
+Open an issue with steps to reproduce, what you expected, and what actually happened. Screenshots help.
 
-## Arc-Specific Rules
+## Security
 
-When contributing blockchain features:
-- Always display gas in USDC, never ETH
-- Never use `PREVRANDAO` for randomness
-- Always handle `SELFDESTRUCT` Arc revert cases
-- Distinguish 18-dec native USDC from 6-dec ERC-20 USDC
-
-## License
-
-By contributing, you agree your contributions are licensed under MIT.
+Never include private keys, seed phrases or secrets in code, issues or pull requests. See [SECURITY.md](SECURITY.md).

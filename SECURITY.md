@@ -1,46 +1,26 @@
 # Security Policy
 
-## Reporting Vulnerabilities
+## Reporting a vulnerability
 
-Please report security vulnerabilities to: **admin@woodstonestudio.com**
+If you discover a security vulnerability in Contractory, please report it responsibly:
 
-Do not open public GitHub issues for security vulnerabilities.
+- Open a private security advisory on GitHub, or
+- Contact the maintainer directly rather than opening a public issue.
 
-We will respond within 48 hours and provide a fix within 14 days for critical issues.
+Please include a description of the issue, steps to reproduce, and the potential impact. We will respond as quickly as possible.
 
-## Security Model
+## Handling secrets
 
-### Authentication
-- Sign-In with Ethereum (SIWE) — no passwords
-- HttpOnly session cookie (7 day expiry)
-- One-time nonce prevents replay attacks
-- sameSite: strict prevents CSRF
+Contractory is a client-side application. All environment variables prefixed with `NEXT_PUBLIC_` are exposed to the browser by design and must contain only public values (public RPC URLs, public Supabase anon keys, WalletConnect project IDs).
 
-### Secrets
-- No private keys in code or repository
-- All transactions signed by user's wallet
-- API keys in environment variables only
-- Supabase service role key server-side only
+**Never** commit or expose:
 
-### Database
-- Row-Level Security (RLS) on all tables
-- Users can only read/write their own data
-- No direct client access to privileged operations
+- Wallet private keys or seed phrases
+- Supabase service-role keys
+- Any server-side secret
 
-### API Routes
-- Input validation on all endpoints
-- No stack traces exposed to client
-- Rate limiting via Upstash (configurable)
+All credentials belong in environment variables (e.g. Vercel project settings), never in source code or the repository. A leaked private key can result in irreversible loss of funds.
 
-### Content Security Policy
-All pages serve CSP headers restricting script sources.
+## Smart contracts
 
-## Known Limitations
-
-- Arc Testnet is not mainnet — do not use real funds
-- The compile API runs solc on the server — sanitize inputs before production use at scale
-- WalletConnect requires a valid project ID for mobile wallet support
-
-## Dependency Security
-
-Run `npm audit` regularly. The wagmi/RainbowKit dependency chain has known advisories pending upstream fixes (tracked in wagmi v3 migration).
+Contracts deployed through Contractory run on Arc Testnet. Always review compatibility and security findings before deploying, and verify deployed contracts on ArcScan.
