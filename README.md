@@ -6,19 +6,30 @@
 
 Write, compile, analyze and deploy Arc-compatible smart contracts — with USDC-native gas and sub-second finality, all from one workspace.
 
-[Live App](https://contractory.xyz) · [Report a bug](https://github.com/izmiradami/contractory/issues) · [Request a feature](https://github.com/izmiradami/contractory/issues)
-
 </div>
 
 ---
 
-## Overview
+## Use Contractory
 
-Contractory is a focused development environment for [Arc](https://www.circle.com/arc), Circle''s USDC-native EVM Layer 1. It takes a developer from an empty editor to a verified, on-chain contract without leaving the browser, and gives every deployment a clean control center for ongoing management.
+**Contractory is live. No setup required.**
 
-The product is built around a single, polished developer journey:
+### → [Open the app at contractory.xyz](https://contractory.xyz)
 
-**Connect Wallet → Open Contract Studio → Create ERC20 → Compile → Analyze → Deploy → Verify on ArcScan → Manage in the Contract Control Center.**
+Connect your Arc Testnet wallet and you can immediately:
+
+1. **Connect Wallet** with RainbowKit / SIWE
+2. **Open Contract Studio** and pick a template
+3. **Create an ERC20** (or NFT, multi-token, agent contract)
+4. **Compile** with the in-browser Solidity compiler
+5. **Analyze** with the Arc Compatibility Analyzer (aim for 100/100)
+6. **Deploy** to Arc Testnet, paying gas in USDC
+7. **Verify** the source on ArcScan
+8. **Manage** everything in the Contract Control Center
+
+That flow *is* the product.
+
+---
 
 ## Screenshots
 
@@ -40,7 +51,26 @@ The product is built around a single, polished developer journey:
 - **Contract Control Center** — Per-contract overview, ABI, functions, events, and an AI-assisted executive summary, backed by real on-chain and stored data.
 - **Wallet & auth** — Wallet connection via RainbowKit/wagmi with Sign-In With Ethereum (SIWE).
 
-## Tech Stack
+## Roadmap
+
+Contractory v1.0 is focused on the core contract-development journey. Planned for **v1.1** and beyond:
+
+- **Explorer** — A native Arc block, transaction and contract browser.
+- **Templates** — A searchable gallery of Arc-ready contract templates.
+- **Security Center** — Portfolio-wide static analysis and audit history.
+- **AI Assistant** — A conversational pair-programmer for Arc Solidity.
+- **Payments Hub** — USDC send, bridge, swap and automations.
+- **AI Agents** — On-chain agent identity and reputation (ERC-8004 / ERC-8183).
+
+These appear in the app today as premium "Coming Soon" previews — no mock data, no fake interactions.
+
+---
+
+## Develop Contractory
+
+The section below is for **contributors and developers** who want to run Contractory locally. If you just want to use it, visit [contractory.xyz](https://contractory.xyz) instead.
+
+### Tech Stack
 
 - **Framework:** Next.js 15 (App Router), React 19, TypeScript
 - **Styling:** Tailwind CSS
@@ -48,8 +78,6 @@ The product is built around a single, polished developer journey:
 - **Editor:** Monaco
 - **Persistence:** Supabase
 - **Chain:** Arc Testnet (Chain ID `5042002`, USDC-native gas)
-
-## Getting Started
 
 ### Prerequisites
 
@@ -89,26 +117,13 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 All variables are public client-side values. Never commit private keys or secrets to the repository.
 
-## Deployment
+### Deployment
 
 Contractory deploys cleanly to [Vercel](https://vercel.com):
 
 1. Import the repository into Vercel.
 2. Add the environment variables above in the project settings.
 3. Deploy. Vercel builds with `npm run build` automatically.
-
-## Roadmap
-
-Contractory v1.0 is focused on the core contract-development journey. Planned for **v1.1** and beyond:
-
-- **Explorer** — A native Arc block, transaction and contract browser.
-- **Templates** — A searchable gallery of Arc-ready contract templates.
-- **Security Center** — Portfolio-wide static analysis and audit history.
-- **AI Assistant** — A conversational pair-programmer for Arc Solidity.
-- **Payments Hub** — USDC send, bridge, swap and automations.
-- **AI Agents** — On-chain agent identity and reputation (ERC-8004 / ERC-8183).
-
-These appear in the app today as premium "Coming Soon" previews — no mock data, no fake interactions.
 
 ## Contributing
 
