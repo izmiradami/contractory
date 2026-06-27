@@ -43,7 +43,7 @@ function Hero() {
         </h1>
         <p className="mt-2 text-sm text-text-secondary leading-relaxed max-w-xl">
           Write, compile, analyze and deploy Arc-compatible contracts with USDC-native gas
-          and sub-second finality ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â all from one workspace.
+          and sub-second finality - all from one workspace.
         </p>
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <button
@@ -257,7 +257,7 @@ const DEV_TIPS = [
   { title: 'Use the ERC20 template', desc: 'Start from an audited, Arc-ready ERC20 in Contract Studio.' },
   { title: 'Verify every deployment', desc: 'Verified contracts build trust and unlock ArcScan source view.' },
   { title: 'Review compatibility first', desc: 'Aim for 100/100 on the Arc Analyzer before you deploy.' },
-  { title: 'Gas is paid in USDC', desc: 'No volatile gas token ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â costs stay predictable at ~$0.01 / tx.' },
+  { title: 'Gas is paid in USDC', desc: 'No volatile gas token ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â costs stay predictable at ~$0.01 / tx.' },
 ]
 
 function DeveloperTips() {
